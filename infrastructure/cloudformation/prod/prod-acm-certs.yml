@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ACM Certs
+Resources:
+  Cert:
+    Type: AWS::CertificateManager::Certificate
+    Properties: 
+      DomainName: f1.anikamlodzianowski.com
+      SubjectAlternativeNames:
+      - www.f1.anikamlodzianowski.com
+      Tags:
+      - 
+        Key: "Name"
+        Value: "f1.anikamlodzianowski.com"
+      ValidationMethod: DNS
+Outputs: 
+  Cert:
+    Description: Prod certificate
+    Value: !Ref Cert
+    Export:
+      Name: prod-certificate

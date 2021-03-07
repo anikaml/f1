@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Lambda for setting cache headers
+Parameters:
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+    Default: prod
+Resources:
+  Setter: 
+    Type: AWS::Lambda::Function
+    Properties: 
+      FunctionName: !Sub '${EnvironmentName}-cache-setter-lambda'
+      Handler: "index.handler"
+      MemorySize: 128
+      Role: 
+        Fn::GetAtt: 
+          - "LambdaExecutionRole"
+          - "Arn"
+      Code: 
+        ZipFile: !Sub |
+          const CacheControlHeader = 'max-age=31536000';
+          let aws = require('aws-sdk');
+          let s3 = new aws.S3({ apiVersion: '2006-03-01' });
+          exports.handler = (event, context, callback) => {
+            const bucket = event.Records[0].s3.bucket.name;
+            const key = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, ' '));
+            let params = { Bucket: bucket, Key: key };
+            s3.getObject(params, (err, data) => {
+                if (err) {
+                    console.log(err);
+                    let message = 'Error: Failed to get object: s3://'+bucket+'/'+key +'. Make sure it is in the same region as this function!';
+                    console.log(message);
+                } else {
+                const mimeHeader = data.ContentType;
+                    if (data.CacheControl != CacheControlHeader) {
+                        let params = { Bucket: bucket, Key: key, CopySource: encodeURIComponent(bucket+'/'+key), ContentType: data.ContentType, CacheControl: CacheControlHeader, 'Metadata':{}, MetadataDirective: 'REPLACE' };
+                        s3.copyObject(params, (err, data) => {
+                            if (err) {
+                                console.log(err);
+                                let message = 'Error: Failed to get object: s3://'+bucket+'/'+key +'. Make sure it is in the same region as this function!';
+                                console.log(message);
+                            } else {
+                            let message = 'Metadata updated successfully! OBJECT: s3://'+bucket+'/'+key+' CONTENT-TYPE: '+mimeHeader+' CACHE-CONTROL: '+CacheControlHeader;
+                            console.log(message);
+                            }
+                        });
+                    } else {
+                        let message = 'Metadata already updated! OBJECT: s3://'+bucket+'/'+key+' CONTENT-TYPE: '+mimeHeader+' CACHE-CONTROL: '+CacheControlHeader;
+                        console.log(message);
+                    }
+                }
+            });
+          };
+      Runtime: "nodejs12.x"
+      Timeout: 25
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${EnvironmentName}-cache-lambda-setter'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:*
+            Resource: arn:aws:logs:*:*:*
+          - Effect: Allow
+            Action:
+            - s3:*
+            Resource: 
+              - !Sub arn:aws:s3:::${EnvironmentName}-anika-f1-app-static/*
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt 
+        - Setter
+        - Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:aws:s3:::${EnvironmentName}-anika-f1-app-static
