@@ -40,7 +40,7 @@ Resources:
         - - Pattern: PUSH
             Type: EVENT
           - ExcludeMatchedPattern: false
-            Pattern: '^refs/heads/master'
+            Pattern: '^refs/heads/main'
             Type: HEAD_REF
         Webhook: true
   ServiceRole:
