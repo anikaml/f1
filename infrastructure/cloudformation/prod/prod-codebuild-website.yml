@@ -84,10 +84,8 @@ Resources:
             - logs:CreateLogStream
             - logs:PutLogEvents
             Resource:
-            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}'
-            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}:*'
-            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${ProjectName}:*'
-            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${ProjectName}:*'
+            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${EnvironmentName}-${ProjectName}'
+            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${EnvironmentName}-${ProjectName}:*'
           - Effect: Allow
             Action:
             - codebuild:CreateReportGroup
