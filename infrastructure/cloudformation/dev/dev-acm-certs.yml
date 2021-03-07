@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ACM Certs
+Resources:
+  Cert:
+    Type: AWS::CertificateManager::Certificate
+    Properties: 
+      DomainName: dev.f1.anikamlodzianowski.com
+      SubjectAlternativeNames:
+      - www.dev.f1.anikamlodzianowski.com
+      Tags:
+      - 
+        Key: "Name"
+        Value: "dev.f1.anikamlodzianowski.com"
+      ValidationMethod: DNS
+Outputs: 
+  Cert:
+    Description: Dev certificate
+    Value: !Ref Cert
+    Export:
+      Name: dev-certificate
