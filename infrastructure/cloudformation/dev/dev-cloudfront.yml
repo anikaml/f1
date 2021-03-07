@@ -1,0 +1,129 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Dev Cloudfront
+Parameters:
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+    Default: dev
+  HostedZone:
+    Description: Hosted zone name
+    Type: String
+    Default: dev.f1.anikamlodzianowski.com
+  HostedZoneId:
+    Description: Hosted zone id
+    Type: String
+    Default: Z0783552YWTOSZQQK4M2
+Outputs: 
+  CloudFront:
+    Description: A reference to the CloudFront distribution
+    Value: !Ref CloudFront
+    Export:
+      Name: !Join ['-', [!Ref EnvironmentName, cloudfront]]
+Resources:
+  CloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - dev.f1.anikamlodzianowski.com
+          - www.dev.f1.anikamlodzianowski.com
+        CacheBehaviors:
+        - AllowedMethods:
+          - HEAD
+          - GET
+          - OPTIONS
+          - PUT
+          - POST
+          - PATCH
+          - DELETE
+          CachedMethods:
+          - HEAD
+          - GET
+          - OPTIONS
+          TargetOriginId: staticResources
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+          PathPattern: s3/*
+        CustomErrorResponses:
+        - ErrorCode: '404'
+          ResponsePagePath: "/index.html"
+          ResponseCode: '200'
+          ErrorCachingMinTTL: '30'
+        - ErrorCode: '403'
+          ResponsePagePath: "/index.html"
+          ResponseCode: '200'
+          ErrorCachingMinTTL: '30'
+        DefaultCacheBehavior: #forward to React
+          ForwardedValues:
+            QueryString: 'true'
+            Cookies:
+              Forward: all
+          MinTTL: '300'
+          DefaultTTL: '3600'
+          MaxTTL: '7200'
+          Compress: true
+          TargetOriginId: staticResources
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: 'http2'
+        IPV6Enabled: false
+        PriceClass: PriceClass_100
+        Origins:
+        - Id: staticResources
+          DomainName: !Join ['', [!Ref EnvironmentName, -anika-f1-app-static, .s3.amazonaws.com]]
+          OriginPath: /build/build
+          S3OriginConfig:
+            OriginAccessIdentity: !Join ['', ['origin-access-identity/cloudfront/', !Ref CloudFrontOriginAccessIdentity]]
+        ViewerCertificate:
+          AcmCertificateArn: !ImportValue dev-certificate
+          SslSupportMethod: sni-only
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Join ['-', [dev, cloudfront]]
+  staticS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !ImportValue dev-anika-f1app-static
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - "s3:GetObject*"
+            Effect: "Allow"
+            Resource:
+              Fn::Join:
+                - ""
+                -
+                  - "arn:aws:s3:::"
+                  -
+                    !ImportValue dev-anika-f1app-static
+                  - "/*"
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+  DNSRecord:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: !Ref 'HostedZoneId'
+      RecordSets:
+      - Name: !Join ['', [!Ref 'HostedZone', .]]
+        Type: A
+        AliasTarget:
+          HostedZoneId: 'Z2FDTNDATAQYW2'
+          DNSName: !GetAtt CloudFront.DomainName
+  WwwDNSRecord:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: !Ref 'HostedZoneId'
+      RecordSets:
+      - Name: !Join ['', [www, ., !Ref 'HostedZone', .]]
+        Type: A
+        AliasTarget:
+          HostedZoneId: 'Z2FDTNDATAQYW2'
+          DNSName: !GetAtt CloudFront.DomainName
