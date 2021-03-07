@@ -1,0 +1,98 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Codebuild React Frontend Build
+Parameters:
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+    Default: prod
+  ProjectName:
+    Description: Name of the CodeBuild project
+    Type: String
+    Default: anika-f1-app
+Resources:
+  Builder: 
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub '${EnvironmentName}-${ProjectName}'
+      Description: Codebuild React Frontend Build
+      ServiceRole: !GetAtt ServiceRole.Arn
+      Artifacts:
+        EncryptionDisabled: true
+        Location: !Sub '${EnvironmentName}-${ProjectName}-static'
+        Name: build
+        NamespaceType: NONE
+        Packaging: NONE
+        Type: S3
+      LogsConfig:
+        CloudWatchLogs:
+          GroupName: !Sub '/aws/codebuild/${EnvironmentName}-${ProjectName}'
+          Status: ENABLED
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:1.0
+      Source:
+        Location: https://github.com/anikaniescierewicz/f1.git
+        Type: GITHUB
+      TimeoutInMinutes: 30
+      Triggers:
+        FilterGroups:
+        - - Pattern: PUSH
+            Type: EVENT
+          - ExcludeMatchedPattern: false
+            Pattern: '^refs/tags/.*'
+            Type: HEAD_REF
+        Webhook: true
+  ServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${EnvironmentName}-codebuild-${ProjectName}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codebuild.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - s3:GetBucketAcl
+            - s3:GetBucketLocation
+            Resource: "arn:aws:s3:::codepipeline-${AWS::Region}-*"
+          - Effect: Allow
+            Action:
+            - s3:PutObject
+            - s3:GetBucketAcl
+            - s3:GetBucketLocation
+            Resource: 
+            - "arn:aws:s3:::prod-anika-f1-app-static"
+            - "arn:aws:s3:::prod-anika-f1-app-static/*"
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource:
+            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}'
+            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}:*'
+            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${ProjectName}:*'
+            - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${ProjectName}:*'
+          - Effect: Allow
+            Action:
+            - codebuild:CreateReportGroup
+            - codebuild:CreateReport
+            - codebuild:UpdateReport
+            - codebuild:BatchPutTestCases
+            Resource:
+            - !Sub 'arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:report-group/${ProjectName}-*'
