@@ -1,0 +1,24 @@
+#Used to deploy compiled React files to S3/CloudFront
+
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+        nodejs: 12
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm ci
+      - npm dedupe
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm run build
+  post_build:
+    commands:
+      - echo Build completed, artifacts will be uploaded
+artifacts:
+  files:
+    - build/**/*
+  name: artifact-name
