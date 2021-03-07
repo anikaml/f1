@@ -68,3 +68,23 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## AWS Infrastructure
+
+Validate a template: 
+```
+aws cloudformation validate-template --template-body file://infrastructure/cloudformation/dev/dev-s3.yml --profile f1
+```
+Create new stack:
+```
+aws cloudformation create-stack --stack-name dev-s3 --template-body file://infrastructure/cloudformation/dev/dev-s3.yml --profile f1
+```
+
+Create new stack with IAM capabilities:
+``` 
+aws cloudformation create-stack --stack-name dev-cache-setter-lambda --template-body file://infrastructure/cloudformation/dev/dev-cache-setter-lambda.yml --profile f1 --capabilities CAPABILITY_NAMED_IAM
+```
+Update stack with IAM capabilities:
+```
+aws cloudformation update-stack --stack-name dev-cache-setter-lambda --template-body file://infrastructure/cloudformation/dev/dev-cache-setter-lambda.yml --profile f1 --capabilities CAPABILITY_NAMED_IAM
+```
