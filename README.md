@@ -88,3 +88,11 @@ Update stack with IAM capabilities:
 ```
 aws cloudformation update-stack --stack-name dev-cache-setter-lambda --template-body file://infrastructure/cloudformation/dev/dev-cache-setter-lambda.yml --profile f1 --capabilities CAPABILITY_NAMED_IAM
 ```
+
+## GraphQL API
+
+### Types
+To generate new types:
+```
+amplify codegen
+```
