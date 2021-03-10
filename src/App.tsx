@@ -24,14 +24,6 @@ const appSyncConfig: AWSAppSyncClientOptions = {
   disableOffline: true // https://github.com/awslabs/aws-mobile-appsync-sdk-js/issues/102
 }
 
-// const appSyncOptions = {
-//   defaultOptions: {
-//     watchQuery: {
-//       fetchPolicy: 'cache-and-network'
-//     }
-//   }
-// }
-
 const appSyncClient = new AWSAppSyncClient(appSyncConfig)
 
 
@@ -56,7 +48,6 @@ function App(): JSX.Element {
           WELCOME TO F1 App!!!!!!!!!!!!!!!
         </a>  
       </header>
-      {/* <Test/> */}
       <CircutList />
     </div>  
     </AppContext.Provider>
