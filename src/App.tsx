@@ -7,7 +7,8 @@ import AppSyncConfig from './aws-exports'
 
 import { AppContext } from "./libs/contextLib";
 import CircutList from './CircutList'
-
+import WorldMap from "./components/map/WorldMap";
+import {getData} from './data/data'
 
 Auth.configure({
   region: 'us-west-2',
@@ -25,6 +26,7 @@ const appSyncConfig: AWSAppSyncClientOptions = {
 }
 
 const appSyncClient = new AWSAppSyncClient(appSyncConfig)
+getData()
 
 
 function App(): JSX.Element {
@@ -34,20 +36,7 @@ function App(): JSX.Element {
           value={{ appSyncClient }}
         >
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          WELCOME TO F1 App!!!!!!!!!!!!!!!
-        </a>  
-      </header>
+      <WorldMap />
       <CircutList />
     </div>  
     </AppContext.Provider>
