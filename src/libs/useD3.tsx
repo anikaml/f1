@@ -16,7 +16,7 @@
 import React from 'react';
 import * as d3 from 'd3'
 
-export const useD3 = (renderChartFn: (arg: d3.Selection<HTMLElement, {}, null, undefined>) => Promise<void>, dependencies: []) => {
+export const useD3 = (renderChartFn: (arg: d3.Selection<HTMLElement, {}, null, undefined>) => Promise<void>, dependencies: Date[]) => {
     const ref = React.useRef<HTMLElement>(null!);
 
     React.useEffect(() => {
