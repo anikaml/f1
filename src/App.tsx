@@ -1,14 +1,12 @@
-import React from "react";
-import logo from './logo.svg';
 import './App.css';
 import Auth from '@aws-amplify/auth'
 import AWSAppSyncClient, { AWSAppSyncClientOptions, AUTH_TYPE } from 'aws-appsync'
 import AppSyncConfig from './aws-exports'
 
 import { AppContext } from "./libs/contextLib";
-import CircutList from './CircutList'
-import WorldMap from "./components/map/WorldMap";
 import {getData} from './data/data'
+import RaceList from "./components/RaceList";
+import { getCircuitsObject } from './data/retrievers'
 
 Auth.configure({
   region: 'us-west-2',
@@ -27,18 +25,17 @@ const appSyncConfig: AWSAppSyncClientOptions = {
 
 const appSyncClient = new AWSAppSyncClient(appSyncConfig)
 getData()
-
+const allCircuits = getCircuitsObject(appSyncClient)
 
 function App(): JSX.Element {
 
   return (
     <AppContext.Provider
-          value={{ appSyncClient }}
-        >
-    <div className="App">
-      <WorldMap />
-      <CircutList />
-    </div>  
+      value={{ appSyncClient, allCircuits }}
+    >
+      <div className="App">
+        <RaceList />
+      </div>  
     </AppContext.Provider>
   );
 }

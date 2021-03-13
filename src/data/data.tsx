@@ -31,7 +31,7 @@ export async function getData() {
   const parseDate = d3.timeParse("%m/%d/%Y");
   const projection = d3.geoNaturalEarth1();
   const dataPoints = await d3.tsv("https://gist.githubusercontent.com/mbostock/4330486/raw/fe47cd0f43281cae3283a5b397f8f0118262bf55/walmart.tsv", d => {
-    console.log(d)
+    // console.log(d)
     const p: point = projection([Number(d[0]), Number(d[1])]);
     if ((d.date) && (p)) {
       p.date = parseDate(d.date);
