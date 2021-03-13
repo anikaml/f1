@@ -4,7 +4,6 @@ import AWSAppSyncClient, { AWSAppSyncClientOptions, AUTH_TYPE } from 'aws-appsyn
 import AppSyncConfig from './aws-exports'
 
 import { AppContext } from "./libs/contextLib";
-import WorldMap from "./components/map/WorldMap";
 import {getData} from './data/data'
 import RaceList from "./components/RaceList";
 import { getCircuitsObject } from './data/retrievers'

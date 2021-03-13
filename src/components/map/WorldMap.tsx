@@ -84,7 +84,6 @@ export default function WorldMap(props: any) {
             .transition()
             .attr("fill-opacity", 0)
             .attr("stroke-opacity", 1)
-            // .text("hello")
             g.append("text")
             .text(d.name)
             .attr("transform", `translate(${d.coordinates})`)
@@ -108,7 +107,6 @@ export default function WorldMap(props: any) {
         });
       }
     },
-    // [data.length]
     [props.startDate, props.endDate]
   );
 
