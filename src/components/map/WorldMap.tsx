@@ -2,19 +2,21 @@ import React from 'react';
 import * as d3 from 'd3';
 import { useD3 } from '../../libs/useD3';
 import * as topojson from "topojson-client"
-import { GeometryObject, Topology } from 'topojson-specification';
-import {getUs, getData} from '../../data/data'
+import { GeometryObject } from 'topojson-specification';
+import { getWorld, getRacesWithCircuits } from '../../data/retrievers';
+import { useAppContext } from "../../libs/contextLib";
 
-
-
-export default function WorldMap() {
+export default function WorldMap(props: any) {
   const [buttonText, setButtonText] = React.useState(true);
+  const { appSyncClient, allCircuits } = useAppContext();
 
   const ref = useD3(
     async function parowki(svg) {
 
-      let world = await getUs();
-      let data = await getData();
+      if(allCircuits){
+
+      let world = await getWorld();
+      let data = await getRacesWithCircuits(appSyncClient, props.startDate, props.endDate, allCircuits);
 
       let date: Date | string = Date();
       let projection = d3.geoNaturalEarth1();
@@ -23,11 +25,10 @@ export default function WorldMap() {
       let outline: d3.GeoPermissibleObjects = { type: "Sphere" };
       let ppath = path(outline)
 
-
-
       const delay = d3.scaleTime()
         .domain([data[0].date, data[data.length - 1].date])
-        .range([0, 20000]);
+        .range([0, 800 * data.length]);
+      // const delay = 500
 
       // svg.append("path")
       //   .attr("id", "outline")
@@ -36,13 +37,10 @@ export default function WorldMap() {
       //   .attr("stroke-width", "2")
       //   .attr("d", ppath);
 
-
-
       svg.append("path")
         .datum(topojson.feature(world, world?.objects.land))
         .attr("fill", "#ddd")
         .attr("d", path);
-
 
       svg.append("path")
         .datum(topojson.mesh(
@@ -54,7 +52,6 @@ export default function WorldMap() {
         .attr("stroke", "white")
         .attr("stroke-linejoin", "round")
         .attr("d", path);
-
 
       // svg.append("path")
       //   .datum(topojson.feature(world, world.objects.countries).features)
@@ -74,19 +71,30 @@ export default function WorldMap() {
 
       svg.append("circle")
         .attr("fill", "blue")
-        .attr("transform", `translate(${data[0]})`)
+        .attr("transform", `translate(${data[0].coordinates})`)
         .attr("r", 3);
 
       for (const d of data) {
         d3.timeout(() => {
           g.append("circle")
-            .attr("transform", `translate(${d})`)
+            .attr("transform", `translate(${d.coordinates})`)
             .attr("r", 3)
             .attr("fill-opacity", 1)
             .attr("stroke-opacity", 0)
             .transition()
             .attr("fill-opacity", 0)
-            .attr("stroke-opacity", 1);
+            .attr("stroke-opacity", 1)
+            // .text("hello")
+            g.append("text")
+            .text(d.name)
+            .attr("transform", `translate(${d.coordinates})`)
+            .attr("fill-opacity", 1)
+            .attr("stroke-opacity", 1)
+            
+            .transition()
+            .delay(600)
+            .attr("fill-opacity", 0)
+            .attr("stroke-opacity", 0)
         }, delay(d.date));
       }
 
@@ -98,14 +106,11 @@ export default function WorldMap() {
           const i = d3.interpolateDate(...dd);
           return (t:number) => date = d3.timeDay(i(t));
         });
+      }
     },
     // [data.length]
-    []
+    [props.startDate, props.endDate]
   );
-
-
-
-
 
   return (
     <>
@@ -118,10 +123,6 @@ export default function WorldMap() {
           marginLeft: "0px",
         }}
       >
-        {/* <g className="circle" />
-            <g className="x-axis" />
-            <g className="y-axis" />
-            <g className="y2-axis" /> */}
       </svg>
       <div>
         <h1>HELLO</h1>
