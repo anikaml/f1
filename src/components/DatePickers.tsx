@@ -1,11 +1,8 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {RaceDate, WorldMapPropsType} from './map/WorldMap';
 
-type RaceDate = Date | null
-
-interface DatePickersPropsType {
-  startDate: RaceDate,
-  endDate: RaceDate,
+interface DatePickersPropsType extends WorldMapPropsType {
   setStartDateChange: (newStartDate: RaceDate) => void,
   setEndDateChange: (newStartDate: RaceDate) => void
 }

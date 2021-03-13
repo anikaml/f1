@@ -6,14 +6,26 @@ import { GeometryObject } from 'topojson-specification';
 import { getWorld, getRacesWithCircuits } from '../../data/retrievers';
 import { useAppContext } from "../../libs/contextLib";
 
-export default function WorldMap(props: any) {
+export type RaceDate = Date | null
+
+export interface WorldMapPropsType {
+  startDate: RaceDate,
+  endDate: RaceDate,
+}
+
+export default function WorldMap(props: WorldMapPropsType) {
   const [buttonText, setButtonText] = React.useState(true);
   const { appSyncClient, allCircuits } = useAppContext();
+
+  let refreshDependencies: Date[] = []
+  if(props.startDate && props.endDate) {
+    refreshDependencies = [props.startDate, props.endDate]
+  }
 
   const ref = useD3(
     async function parowki(svg) {
 
-      if(allCircuits){
+      if(allCircuits && props.startDate && props.endDate){
 
       let world = await getWorld();
       let data = await getRacesWithCircuits(appSyncClient, props.startDate, props.endDate, allCircuits);
@@ -107,7 +119,7 @@ export default function WorldMap(props: any) {
         });
       }
     },
-    [props.startDate, props.endDate]
+    refreshDependencies
   );
 
   return (
