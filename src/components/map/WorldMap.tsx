@@ -13,22 +13,22 @@ export interface WorldMapPropsType {
   endDate: RaceDate,
 }
 
-export default function WorldMap(props: WorldMapPropsType) {
+  export default function WorldMap({startDate, endDate}: WorldMapPropsType) {
   const [buttonText, setButtonText] = React.useState(true);
   const { appSyncClient, allCircuits } = useAppContext();
 
   let refreshDependencies: Date[] = []
-  if(props.startDate && props.endDate) {
-    refreshDependencies = [props.startDate, props.endDate]
+  if(startDate && endDate) {
+    refreshDependencies = [startDate, endDate]
   }
 
   const ref = useD3(
     async function parowki(svg) {
 
-      if(allCircuits && props.startDate && props.endDate){
+      if(allCircuits && startDate && endDate){
 
       let world = await getWorld();
-      let data = await getRacesWithCircuits(appSyncClient, props.startDate, props.endDate, allCircuits);
+      let data = await getRacesWithCircuits(appSyncClient, startDate, endDate, allCircuits);
 
       let date: Date | string = Date();
       let projection = d3.geoNaturalEarth1();
