@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import * as d3 from 'd3';
-import { useD3 } from '../../libs/useD3';
 import * as topojson from "topojson-client"
 import { GeometryObject } from 'topojson-specification';
+import { Typography } from '@material-ui/core/';
+
 import { getWorld, getRacesWithCircuits } from '../../data/retrievers';
 import { useAppContext } from "../../libs/contextLib";
+import { useD3 } from '../../libs/useD3';
 
 export type RaceDate = Date | null
 
@@ -13,9 +15,9 @@ export interface WorldMapPropsType {
   endDate: RaceDate,
 }
 
-  export default function WorldMap({startDate, endDate}: WorldMapPropsType) {
-  const [buttonText, setButtonText] = React.useState(true);
+export default function WorldMap({startDate, endDate}: WorldMapPropsType) {
   const { appSyncClient, allCircuits } = useAppContext();
+  const [topText, setTopText] = useState<string | null>("");
 
   let refreshDependencies: Date[] = []
   if(startDate && endDate) {
@@ -33,26 +35,25 @@ export interface WorldMapPropsType {
       let date: Date | string = Date();
       let projection = d3.geoNaturalEarth1();
       const path = d3.geoPath(projection);
-      // let outline = ({ type: "Sphere" });
-      let outline: d3.GeoPermissibleObjects = { type: "Sphere" };
-      let ppath = path(outline)
+      //let outline: d3.GeoPermissibleObjects = { type: "Sphere" };
+      let ppath = path({type: "Sphere"})
 
       const delay = d3.scaleTime()
         .domain([data[0].date, data[data.length - 1].date])
-        .range([0, 800 * data.length]);
+        .range([0, 1400 * data.length]);
       // const delay = 500
 
-      // svg.append("path")
-      //   .attr("id", "outline")
-      //   .attr("fill", "none")
-      //   .attr("stroke", "#ddd")
-      //   .attr("stroke-width", "2")
-      //   .attr("d", ppath);
+      svg.append("path")
+        .attr("id", "outline")
+        .attr("fill", "none")
+        .attr("stroke", "#ddd")
+        .attr("stroke-width", "2")
+        .attr("d", () => ppath);
 
       svg.append("path")
         .datum(topojson.feature(world, world?.objects.land))
         .attr("fill", "#ddd")
-        .attr("d", path);
+        .attr("d", path)
 
       svg.append("path")
         .datum(topojson.mesh(
@@ -78,7 +79,7 @@ export interface WorldMapPropsType {
       // .attr("stroke-linejoin", "round")
       // .attr("d", path);
       const g = svg.append("g")
-        .attr("fill", "red")
+        .attr("fill", "black")
         .attr("stroke", "black");
 
       svg.append("circle")
@@ -96,16 +97,19 @@ export interface WorldMapPropsType {
             .transition()
             .attr("fill-opacity", 0)
             .attr("stroke-opacity", 1)
+
             g.append("text")
-            .text(d.name)
+            .text(d.circuitName)
             .attr("transform", `translate(${d.coordinates})`)
             .attr("fill-opacity", 1)
             .attr("stroke-opacity", 1)
-            
             .transition()
-            .delay(600)
+            .delay(800)
             .attr("fill-opacity", 0)
             .attr("stroke-opacity", 0)
+
+            setTopText(d.date.toISOString().substring(0,10) + ' ' + d.name)
+            
         }, delay(d.date));
       }
 
@@ -117,6 +121,7 @@ export interface WorldMapPropsType {
           const i = d3.interpolateDate(...dd);
           return (t:number) => date = d3.timeDay(i(t));
         });
+
       }
     },
     refreshDependencies
@@ -124,21 +129,23 @@ export interface WorldMapPropsType {
 
   return (
     <>
+  <Typography>{topText}</Typography>
       <svg
         ref={(ref as unknown) as React.LegacyRef<SVGSVGElement>}
+        viewBox="0 0 960 500"
         style={{
-          height: "100vh",
-          width: "100%",
-          marginRight: "0px",
-          marginLeft: "0px",
+          //maxHeight: "100vh",
+          // height:"auto",
+          // width: "100%",
+          // marginRight: "0px",
+          // marginLeft: "0px",
+          // maxWidth: "-webkit-fill-available",
+          //border: '1px solid black'
+          overflow: "visible"
         }}
       >
+        
       </svg>
-      <div>
-        <h1>HELLO</h1>
-        <button onClick={() => setButtonText(!buttonText)}>{buttonText.toString()}</button>
-        <h1>HELLO</h1>
-      </div>
     </>
   );
 }
