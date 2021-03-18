@@ -3,7 +3,7 @@ import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider, makeStyles } from "@material-ui/styles";
 
-import {RaceDate, WorldMapPropsType} from './map/WorldMap';
+import {RaceDate} from '../libs/interfaces';
 
 const datePickerTheme = createMuiTheme({
   palette: {
@@ -19,7 +19,9 @@ const useStyles = makeStyles({
   }
 });
 
-interface DatePickersPropsType extends WorldMapPropsType {
+interface DatePickersPropsType {
+  startDate: RaceDate,
+  endDate: RaceDate,
   setStartDateChange: (newStartDate: RaceDate) => void,
   setEndDateChange: (newStartDate: RaceDate) => void
 }
