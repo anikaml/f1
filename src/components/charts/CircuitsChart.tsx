@@ -8,6 +8,7 @@ import * as d3 from 'd3';
 import { useD3 } from '../../libs/useD3';
 import { useDateContext } from "../../libs/contextLib";
 import { GeneralGraphPropsType } from '../../libs/interfaces';
+import {getPropertyArray} from '../../utils/helpers'
 
 export default function CircuitsChart({raceData}: GeneralGraphPropsType) {
   const { startDate, endDate } = useDateContext();
@@ -17,6 +18,9 @@ export default function CircuitsChart({raceData}: GeneralGraphPropsType) {
 
       const color = "steelblue";
       let data = raceData
+
+      let result = getPropertyArray(data)
+      console.log('RESULT', result)
     },
     [startDate, endDate]
   );
