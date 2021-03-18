@@ -3,7 +3,9 @@ import * as d3 from 'd3';
 import { allCircuits, timerangeRaces } from '../graphql/queries';
 import AWSAppSyncClient from 'aws-appsync';
 import { Topology } from "topojson-specification" ;
-import { Circuit, TimerangeRaces, Race} from "../API"
+import { Circuit, Race, TimerangeRaces } from "../API"
+import { circuitObject, combinedRaceCircuit, point } from "../libs/interfaces"
+
 
 interface apiResponse { 
   objects: {
@@ -24,18 +26,6 @@ interface circuitApiResponse {
       circuits: Circuit[]
     }
   }
-};
-
-export interface circuitObject { 
-  [id: number]: Circuit
-};
-
-type point = [number, number] | null
-
-interface combinedRaceCircuit extends Omit<Race, 'date'> { 
-  date: Date,
-  circuitName: string,
-  coordinates: point
 };
 
 export async function getWorld() {
