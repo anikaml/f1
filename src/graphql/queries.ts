@@ -32,6 +32,12 @@ export const allRaces = /* GraphQL */ `
         name
         id
         date
+        driver_win {
+          name
+        }
+        constructor_win {
+          name
+        }
         circuit_id
         round
       }
@@ -54,6 +60,12 @@ export const timerangeRaces = /* GraphQL */ `
         name
         id
         date
+        driver_win {
+          name
+        }
+        constructor_win {
+          name
+        }
         circuit_id
         round
       }
