@@ -4,7 +4,6 @@ import AWSAppSyncClient, { AWSAppSyncClientOptions, AUTH_TYPE } from 'aws-appsyn
 import AppSyncConfig from './aws-exports'
 
 import { AppContext } from "./libs/contextLib";
-import {getData} from './data/data'
 import Landing from "./components/Landing";
 import { getCircuitsObject } from './data/retrievers'
 
@@ -24,7 +23,6 @@ const appSyncConfig: AWSAppSyncClientOptions = {
 }
 
 const appSyncClient = new AWSAppSyncClient(appSyncConfig)
-getData()
 const allCircuits = getCircuitsObject(appSyncClient)
 
 function App(): JSX.Element {
