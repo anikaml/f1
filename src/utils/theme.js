@@ -21,13 +21,13 @@ const theme = createMuiTheme({
       type: "light",  
       primary: {
         light: '#F4F4FE',
-        main: '"#e10600"', 
+        main: "#e10600", 
         dark: '#111030',
         contrastText: '#FFFFFF',
       },
       secondary: {
         light: '#E2B1AF',
-        main: '#FF9F79',
+        main: 'rgb(221, 221, 221)',
         dark: '#3D444F',
         contrastText: '#111030',
       },
