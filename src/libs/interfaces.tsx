@@ -18,6 +18,17 @@ export interface WorldMapPropsType {
   raceData: Promise<combinedRaceCircuit[]>
 }
 
-export interface GeneralGraphPropsType {
+export interface GraphSelectorPropsType {
   raceData: combinedRaceCircuit[]
+}
+
+export interface GeneralGraphPropsType {
+  name: string,
+  value: number
+}
+
+export enum CombinedRaceCircuitPropertyEnum {
+  circuitName = "circuitName",
+  driver_win = "driver_win",
+  constructor_win = "constructor_win",
 }

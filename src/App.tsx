@@ -5,7 +5,7 @@ import AppSyncConfig from './aws-exports'
 
 import { AppContext } from "./libs/contextLib";
 import {getData} from './data/data'
-import RaceList from "./components/RaceList";
+import Landing from "./components/Landing";
 import { getCircuitsObject } from './data/retrievers'
 
 Auth.configure({
@@ -34,7 +34,7 @@ function App(): JSX.Element {
       value={{ appSyncClient, allCircuits }}
     >
       <div className="App">
-        <RaceList />
+        <Landing />
       </div>  
     </AppContext.Provider>
   );
