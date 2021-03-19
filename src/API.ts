@@ -30,7 +30,7 @@ export type Race = {
   driver_win: Driver,
   constructor_win: Constructor,
   circuit_id: number,
-  round?: number,
+  round: number,
 };
 
 export type Driver = {
@@ -93,6 +93,14 @@ export type AllRacesQuery = {
       name: string,
       id: number,
       date: string,
+      driver_win:  {
+        __typename: "Driver",
+        name: string,
+      },
+      constructor_win:  {
+        __typename: "Constructor",
+        name: string,
+      },
       circuit_id: number,
       round: number,
     } >,
@@ -114,6 +122,14 @@ export type TimerangeRacesQuery = {
       name: string,
       id: number,
       date: string,
+      driver_win:  {
+        __typename: "Driver",
+        name: string,
+      },
+      constructor_win:  {
+        __typename: "Constructor",
+        name: string,
+      },
       circuit_id: number,
       round: number,
     } >,

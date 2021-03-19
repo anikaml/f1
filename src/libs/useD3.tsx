@@ -1,7 +1,8 @@
 import React from 'react';
-import * as d3 from 'd3'
+import * as d3 from 'd3';
+import {RaceDate} from './interfaces'
 
-export const useD3 = (renderChartFn: (arg: d3.Selection<HTMLElement, {}, null, undefined>) => Promise<void>, dependencies: Date[]) => {
+export const useD3 = (renderChartFn: (arg: d3.Selection<HTMLElement, {}, null, undefined>) => Promise<void>, dependencies: (RaceDate | undefined)[]) => {
     const ref = React.useRef<HTMLElement>(null!);
 
     React.useEffect(() => {

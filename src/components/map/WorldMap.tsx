@@ -1,36 +1,23 @@
-import React, {useState} from 'react';
+import React from 'react';
 import * as d3 from 'd3';
 import * as topojson from "topojson-client"
 import { GeometryObject } from 'topojson-specification';
-import { Typography } from '@material-ui/core/';
-
-import { getWorld, getRacesWithCircuits } from '../../data/retrievers';
-import { useAppContext } from "../../libs/contextLib";
+import { useDateContext } from "../../libs/contextLib";
+import { getWorld } from '../../data/retrievers';
+import { GraphSelectorPropsType } from '../../libs/interfaces';
 import { useD3 } from '../../libs/useD3';
 
-export type RaceDate = Date | null
-
-export interface WorldMapPropsType {
-  startDate: RaceDate,
-  endDate: RaceDate,
-}
-
-export default function WorldMap({startDate, endDate}: WorldMapPropsType) {
-  const { appSyncClient, allCircuits } = useAppContext();
-  const [topText, setTopText] = useState<string | null>("");
-
-  let refreshDependencies: Date[] = []
-  if(startDate && endDate) {
-    refreshDependencies = [startDate, endDate]
-  }
+export default function WorldMap({raceData}: GraphSelectorPropsType) {
+  const { startDate, endDate } = useDateContext();
 
   const ref = useD3(
     async function parowki(svg) {
-
-      if(allCircuits && startDate && endDate){
+      d3.selectAll("g").remove();
+      d3.selectAll("circle").remove();
+      d3.selectAll("text").remove();
 
       let world = await getWorld();
-      let data = await getRacesWithCircuits(appSyncClient, startDate, endDate, allCircuits);
+      let data = raceData
 
       let date: Date | string = Date();
       let projection = d3.geoNaturalEarth1();
@@ -78,9 +65,16 @@ export default function WorldMap({startDate, endDate}: WorldMapPropsType) {
       // .attr("stroke", "white")
       // .attr("stroke-linejoin", "round")
       // .attr("d", path);
+
       const g = svg.append("g")
         .attr("fill", "black")
         .attr("stroke", "black");
+
+      const t = svg.append("text")
+        .text("elo")
+        .attr("stroke", "black")
+        .attr("fill-opacity", 1)
+        .attr("stroke-opacity", 1);
 
       svg.append("circle")
         .attr("fill", "blue")
@@ -108,7 +102,7 @@ export default function WorldMap({startDate, endDate}: WorldMapPropsType) {
             .attr("fill-opacity", 0)
             .attr("stroke-opacity", 0)
 
-            setTopText(d.date.toISOString().substring(0,10) + ' ' + d.name)
+            t.text(d.date.toISOString().substring(0,10) + ' ' + d.name)
             
         }, delay(d.date));
       }
@@ -122,14 +116,12 @@ export default function WorldMap({startDate, endDate}: WorldMapPropsType) {
           return (t:number) => date = d3.timeDay(i(t));
         });
 
-      }
     },
-    refreshDependencies
+    [startDate, endDate]
   );
 
   return (
     <>
-  <Typography>{topText}</Typography>
       <svg
         ref={(ref as unknown) as React.LegacyRef<SVGSVGElement>}
         viewBox="0 0 960 500"
