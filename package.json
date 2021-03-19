@@ -38,6 +38,9 @@
       "react-app/jest"
     ]
   },
+  "jest": {
+    "watchPathIgnorePatterns": ["src/__tests__/combinedRaceData.js"]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
