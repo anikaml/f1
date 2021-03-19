@@ -9,7 +9,7 @@ interface resultArrayType {
   value: number
 }
 
-function getProperty(element: combinedRaceCircuit, property: CombinedRaceCircuitPropertyEnum) {
+export function getProperty(element: combinedRaceCircuit, property: CombinedRaceCircuitPropertyEnum) {
   if (property === CombinedRaceCircuitPropertyEnum.driver_win) {
     return element.driver_win.name
   } else if (property === CombinedRaceCircuitPropertyEnum.constructor_win) {
