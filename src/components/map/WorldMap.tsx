@@ -4,10 +4,10 @@ import * as topojson from "topojson-client"
 import { GeometryObject } from 'topojson-specification';
 import { useDateContext } from "../../libs/contextLib";
 import { getWorld } from '../../data/retrievers';
-import { GeneralGraphPropsType } from '../../libs/interfaces';
+import { GraphSelectorPropsType } from '../../libs/interfaces';
 import { useD3 } from '../../libs/useD3';
 
-export default function WorldMap({raceData}: GeneralGraphPropsType) {
+export default function WorldMap({raceData}: GraphSelectorPropsType) {
   const { startDate, endDate } = useDateContext();
 
   const ref = useD3(

@@ -9,8 +9,8 @@ import AWSAppSyncClient from 'aws-appsync';
 import DatePickers from "./DatePickers";
 import WorldMap from "./map/WorldMap";
 import { makeStyles } from "@material-ui/styles";
-import CircuitsChart from "./charts/CircuitsChart";
 import {RaceDate, circuitObject} from '../libs/interfaces';
+import ChartSelector from "./charts/ChartSelector";
 
 const useStyles = makeStyles({
   title: {
@@ -24,6 +24,7 @@ export default function RaceList(): JSX.Element {
   const [startDate, setStartDateChange] = useState<Date | null>(new Date("2010-03-02"));
   const [endDate, setEndDateChange] = useState<Date | null>(new Date());
   const [raceData, setRaceData] = useState<combinedRaceCircuit[]>([])
+  const [initialLoad, setInitialLoad] = useState<boolean>(true)
 
   useEffect(() => {
     if (startDate && endDate && allCircuits){
@@ -35,7 +36,20 @@ export default function RaceList(): JSX.Element {
     if (appSyncClient && startDate && endDate && allCircuits){
       let data = await getRacesWithCircuits(appSyncClient, startDate, endDate, allCircuits)
       setRaceData(data)
+      setInitialLoad(false)
     }
+  }
+
+  let components;
+  if (raceData.length !== 0) {
+    components = (<>
+                    <WorldMap raceData={raceData} />
+                    <ChartSelector raceData={raceData}/>
+                  </>)
+  } else if (!initialLoad) {
+    components = <Typography variant="h6">No races found. Please select different dates</Typography>
+  } else {
+    components = undefined
   }
 
   return (
@@ -51,12 +65,7 @@ export default function RaceList(): JSX.Element {
             setStartDateChange={setStartDateChange}
             setEndDateChange={setEndDateChange}
           />
-          {(raceData.length !== 0) && (<WorldMap
-            raceData={raceData}
-          />)}
-          {(raceData.length !== 0) && (<CircuitsChart
-            raceData={raceData}
-          />)}
+          {components}
         </Container>
       </DateContext.Provider>
     </>
