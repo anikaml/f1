@@ -1,22 +1,56 @@
 import { useState, useEffect } from "react";
-import {Container, Typography} from '@material-ui/core/';
+import { Container, Typography, Link } from '@material-ui/core/';
+import { makeStyles } from '@material-ui/core/styles';
+import GitHubIcon from '@material-ui/icons/GitHub';
+import IconButton from '@material-ui/core/IconButton';
 
-import { useAppContext, DateContext } from "../libs/contextLib";
-import { combinedRaceCircuit } from '../libs/interfaces';
-import { getRacesWithCircuits } from '../data/retrievers';
 import AWSAppSyncClient from 'aws-appsync';
-
-import DatePickers from "./DatePickers";
-import WorldMap from "./map/WorldMap";
-import { makeStyles } from "@material-ui/styles";
-import {RaceDate, circuitObject} from '../libs/interfaces';
 import ChartSelector from "./charts/ChartSelector";
+import { combinedRaceCircuit } from '../libs/interfaces';
+import DatePickers from "./DatePickers";
+import { getRacesWithCircuits } from '../data/retrievers';
+import { RaceDate, circuitObject } from '../libs/interfaces';
+import { useAppContext, DateContext } from "../libs/contextLib";
+import WorldMap from "./map/WorldMap";
+import Footer from "./Footer";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   title: {
     fontFamily: 'Russo One',
+    padding: "0.5em",
+    color: 'white',
+  }, 
+  titleDiv: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: 'center',
+    background: theme.palette.primary.main,
+    width: '100vw',
+    borderRadius: '0px 0px 30px 30px',
+    marginBottom: '1em'
+  },
+  emptyDiv: {
+    height: "100vh"
+  },
+  iconButton: {
+    color: 'white',
+    position: 'absolute',
+    right: 50,
+  },
+  icon: {
+    '@media (max-width:700px)': {
+      height: '0.5em',
+    }
+  },
+  typography: {
+    fontFamily: 'Russo One',
+  },
+  titleContainer: {
+    '@media (max-width:900px)': {
+      padding: "0 1em 1em 1em",
+    }
   }
-});
+}));
 
 export default function RaceList(): JSX.Element {
   const classes = useStyles();
@@ -49,7 +83,7 @@ export default function RaceList(): JSX.Element {
   } else if (!initialLoad) {
     components = <Typography variant="h6">No races found. Please select different dates</Typography>
   } else {
-    components = undefined
+    components = <div className={classes.emptyDiv}/>
   }
 
   return (
@@ -57,16 +91,54 @@ export default function RaceList(): JSX.Element {
       <DateContext.Provider
         value={{ startDate, endDate }}
       >
+        <div className={classes.titleDiv}>
+          <Typography variant="h3" className={classes.title}>F1 stats</Typography>
+          <IconButton 
+            aria-label="github"
+            component={Link}
+            href={`https://github.com/anikaniescierewicz/f1`}
+            rel="noopener noreferrer"
+            target="_blank"
+            className={classes.iconButton}
+          >
+           <GitHubIcon className={classes.icon}/>
+        </IconButton>
+        </div>
         <Container maxWidth="md">
-        <Typography variant="h3" className={classes.title}>F1 stats</Typography>
-          <DatePickers 
-            startDate={startDate}
-            endDate={endDate}
-            setStartDateChange={setStartDateChange}
-            setEndDateChange={setEndDateChange}
-          />
+          <div className={classes.titleContainer}>
+            <Typography className={classes.typography}>
+            {' Select start and end dates to see a '}
+              <Link href="/#timelapse" style={{ textDecoration: 'none'}}>
+                <Typography 
+                  variant="h6"
+                  display={'inline'}
+                >
+                  timelapse
+                </Typography>
+              </Link>
+              {' and '}
+              <Link href="/#statistics" style={{ textDecoration: 'none'}}>
+                <Typography 
+                  variant="h6"
+                  display={'inline'}
+                >
+                  statistics
+                </Typography>
+              </Link>
+            {' for F1 races in your chosen period'}
+            </Typography>
+          </div>
+          <div id='timelapse'>
+            <DatePickers 
+              startDate={startDate}
+              endDate={endDate}
+              setStartDateChange={setStartDateChange}
+              setEndDateChange={setEndDateChange}
+            />
+          </div>
           {components}
         </Container>
+        <Footer />
       </DateContext.Provider>
     </>
   );

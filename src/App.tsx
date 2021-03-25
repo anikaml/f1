@@ -1,11 +1,14 @@
 import './App.css';
 import Auth from '@aws-amplify/auth'
 import AWSAppSyncClient, { AWSAppSyncClientOptions, AUTH_TYPE } from 'aws-appsync'
-import AppSyncConfig from './aws-exports'
 
 import { AppContext } from "./libs/contextLib";
-import Landing from "./components/Landing";
+import AppSyncConfig from './aws-exports'
 import { getCircuitsObject } from './data/retrievers'
+import Landing from "./components/Landing";
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import theme from './utils/theme';
+
 
 Auth.configure({
   region: 'us-west-2',
@@ -31,9 +34,11 @@ function App(): JSX.Element {
     <AppContext.Provider
       value={{ appSyncClient, allCircuits }}
     >
+      <MuiThemeProvider theme={theme}>
       <div className="App">
         <Landing />
       </div>  
+      </MuiThemeProvider>
     </AppContext.Provider>
   );
 }
