@@ -22,13 +22,11 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
       let date: Date | string = Date();
       let projection = d3.geoNaturalEarth1();
       const path = d3.geoPath(projection);
-      //let outline: d3.GeoPermissibleObjects = { type: "Sphere" };
       let ppath = path({type: "Sphere"})
 
       const delay = d3.scaleTime()
         .domain([data[0].date, data[data.length - 1].date])
         .range([0, 1400 * data.length]);
-      // const delay = 500
 
       svg.append("path")
         .attr("id", "outline")
@@ -52,19 +50,6 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
         .attr("stroke", "white")
         .attr("stroke-linejoin", "round")
         .attr("d", path);
-
-      // svg.append("path")
-      //   .datum(topojson.feature(world, world.objects.countries).features)
-      // svg.append("path")
-      //   .datum(topojson.merge(world, world.objects.countries.geometries))
-      // .attr("fill", "#ddd")
-      // .attr("d", path);
-      // svg.append("path")
-      // .datum(topojson.mesh(world, world.objects.countries, (a, b) => a !== b))
-      // .attr("fill", "none")
-      // .attr("stroke", "white")
-      // .attr("stroke-linejoin", "round")
-      // .attr("d", path);
 
       const g = svg.append("g")
         .attr("fill", "black")
@@ -103,6 +88,10 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
             .attr("stroke-opacity", 0)
 
             t.text(d.date.toISOString().substring(0,10) + ' ' + d.name)
+            .attr('transform', 'translate(330, -15)')
+            .style("font-size","20px")
+            .style("font-family", "Russo One")
+            .style("margin-bottom", 20)
             
         }, delay(d.date));
       }
@@ -126,17 +115,9 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
         ref={(ref as unknown) as React.LegacyRef<SVGSVGElement>}
         viewBox="0 0 960 500"
         style={{
-          //maxHeight: "100vh",
-          // height:"auto",
-          // width: "100%",
-          // marginRight: "0px",
-          // marginLeft: "0px",
-          // maxWidth: "-webkit-fill-available",
-          //border: '1px solid black'
           overflow: "visible"
         }}
       >
-        
       </svg>
     </>
   );

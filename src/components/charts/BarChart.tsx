@@ -45,12 +45,14 @@ export default function BarChart({data, yAxisText}: BarChartPropsType) {
           .call(g => g.append("text")
           .attr("x", -margin.left)
           .attr("y", 10)
-          .attr("fill", "currentColor")
+          .attr("fill", "#1f1f26")
           .attr("text-anchor", "start")
           .text(yAxisText))
+          .style("color", "#1f1f26")
 
         const xAxis = (g: d3.Selection<SVGGElement, {}, null, undefined>) => g
           .attr("transform", `translate(0,${height - margin.bottom})`)
+          .style("color", "#1f1f26")
           .call(
             d3.axisBottom(x)
             .tickFormat(i => data[Number(i)].name)
@@ -71,6 +73,7 @@ export default function BarChart({data, yAxisText}: BarChartPropsType) {
           .call(xAxis)
           .selectAll("text")  
           .style("text-anchor", "end")
+          .style("color", "#1f1f26")
           .attr("dx", "-.8em")
           .attr("dy", ".15em")
           .attr("transform", "rotate(-65)");

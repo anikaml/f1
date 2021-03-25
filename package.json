@@ -1,11 +1,12 @@
 {
   "name": "f1app",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@aws-amplify/auth": "^3.4.26",
     "@date-io/date-fns": "^1.3.13",
     "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
@@ -39,7 +40,9 @@
     ]
   },
   "jest": {
-    "watchPathIgnorePatterns": ["src/__tests__/combinedRaceData.js"]
+    "watchPathIgnorePatterns": [
+      "src/__tests__/combinedRaceData.js"
+    ]
   },
   "browserslist": {
     "production": [
