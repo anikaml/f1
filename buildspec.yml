@@ -7,10 +7,12 @@ phases:
     runtime-versions:
         nodejs: 10
   pre_build:
+    on-failure: ABORT
     commands:
       - echo Installing source NPM dependencies...
       - npm ci
       - npm dedupe
+      - npm test -- --watchAll=false
   build:
     commands:
       - echo Build started on `date`
