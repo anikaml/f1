@@ -20,7 +20,7 @@ describe('Chart Buttons', () => {
   test('checks if second button is disabled when clicked', () => {
     setup()
     userEvent.type(screen.getByRole('button', {name: /Drivers/i}))
-    expect(screen.getByRole('button', {name: /Drivers/i})).toBeDisabled()
+    expect(screen.getByRole('button', {name: /Anika/i})).toBeDisabled()
   })
 
   test('checks if first button is not disabled when user clicked on second button', () => {
