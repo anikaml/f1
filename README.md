@@ -1,3 +1,31 @@
+# F1 Stats App
+
+Welcome to this hobby project repo 
+
+You can see it live on **[f1.anikamlodzianowski.com](https://f1.anikamlodzianowski.com)**
+
+This is a single-page Javascript application showing F1 stats (location of races, drivers wins, constructor wins).
+
+Select on the calendar which time period interests you and the map will visualize each F1 race chronologically and the bar chart will show you even more statistics
+
+Check out projects at my personal portfolio website **[anikamlodzianowski.com](https://anikamlodzianowski.com)**
+
+#
+![screen](https://github.com/anikaniescierewicz/f1/blob/master/public/f1screen.png?raw=true)
+#
+
+### Tech stack
+
+* ReactJS, 
+* Typescript
+* Material-UI
+* d3 (world map and bar chart)
+* Jest (unit testing)
+* @testing-library/react (integration tests)
+* GraphQL (AWS Amplify via Apollo Client)
+* AWS (S3, CloudFront, CodeBuild, CertificateManager, Lambda, IAM, Route53)
+
+#
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
