@@ -53,6 +53,7 @@ export default function ChartSelector({raceData}: GraphSelectorPropsType) {
           color={selectedButton === CombinedRaceCircuitPropertyEnum.circuitName? 'primary' : 'secondary'}
           className={breakpointSM? classes.button : classes.buttonMobile + ' ' + classes.button}
           size={breakpointSM? 'medium': 'small'}
+          disabled={selectedButton === CombinedRaceCircuitPropertyEnum.circuitName}
         >
           Circuits
         </Button>
@@ -62,6 +63,7 @@ export default function ChartSelector({raceData}: GraphSelectorPropsType) {
           color={selectedButton === CombinedRaceCircuitPropertyEnum.driver_win? 'primary' : 'secondary'}
           className={breakpointSM? classes.button : classes.buttonMobile + ' ' + classes.button}
           size={breakpointSM? 'medium': 'small'}
+          disabled={selectedButton === CombinedRaceCircuitPropertyEnum.driver_win}
           style={{margin: "0 0.5em"}}
         >
           Drivers
@@ -72,6 +74,7 @@ export default function ChartSelector({raceData}: GraphSelectorPropsType) {
           color={selectedButton === CombinedRaceCircuitPropertyEnum.constructor_win? 'primary' : 'secondary'}
           className={breakpointSM? classes.button : classes.buttonMobile + ' ' + classes.button}
           size={breakpointSM? 'medium': 'small'}
+          disabled={selectedButton === CombinedRaceCircuitPropertyEnum.constructor_win}
         >
           Constructors
         </Button>
