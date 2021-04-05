@@ -11,7 +11,7 @@ Select on the calendar which time period interests you and the map will visualiz
 Check out projects at my personal portfolio website **[anikamlodzianowski.com](https://anikamlodzianowski.com)**
 
 #
-![screen](https://github.com/anikaniescierewicz/f1/blob/master/public/f1screen.png?raw=true)
+![screen](https://github.com/anikaniescierewicz/f1/blob/main/public/f1screen.png?raw=true)
 #
 
 ### Tech stack
