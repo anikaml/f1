@@ -13,8 +13,7 @@ describe('Chart Buttons', () => {
   test('checks if first button is disabled when page renders', () => {
     setup()
     screen.getByRole('button', {name: /Circuits/i})
-    expect(screen.getByRole('button', {name: /Circuits/i})).toBeDisabled()
-    // screen.debug();
+    expect(screen.getByRole('button', {name: /Circuits/i})).toBeDisabled();
   })
 
   test('checks if second button is disabled when clicked', () => {
@@ -26,6 +25,6 @@ describe('Chart Buttons', () => {
   test('checks if first button is not disabled when user clicked on second button', () => {
     setup()
     userEvent.type(screen.getByRole('button', {name: /Drivers/i}))
-    expect(screen.getByRole('button', {name: /Circuits/i})).not.toBeDisabled()
+    expect(screen.getByRole('button', {name: /Circuits/i})).not.toBeDisabled();
   })
 })

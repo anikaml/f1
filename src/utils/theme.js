@@ -22,13 +22,11 @@ const theme = createTheme({
       primary: {
         light: 'rgb(221, 221, 221)',
         main: "#e10700", 
-        //dark: '#1f1f27',
         contrastText: '#FFFFFF',
       },
       secondary: {
         light: '#E2B1AF',
         main: '#1f1f26',
-        //dark: '#3D444F',
         contrastText: '#FFF',
       },
       text: {
@@ -36,7 +34,6 @@ const theme = createTheme({
       },
       error: {
         main: '#ff0033',
-        // success: '#00BF8B'
       },
       background: {
         default: '#FFF',
