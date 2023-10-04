@@ -6,9 +6,8 @@ import { AppContext } from "./libs/contextLib";
 import AppSyncConfig from './aws-exports'
 import { getCircuitsObject } from './data/retrievers'
 import Landing from "./components/Landing";
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import theme from './utils/theme';
-
 
 Auth.configure({
   region: 'us-west-2',
@@ -29,16 +28,15 @@ const appSyncClient = new AWSAppSyncClient(appSyncConfig)
 const allCircuits = getCircuitsObject(appSyncClient)
 
 function App(): JSX.Element {
-
   return (
     <AppContext.Provider
       value={{ appSyncClient, allCircuits }}
     >
-      <MuiThemeProvider theme={theme}>
-      <div className="App">
-        <Landing />
-      </div>  
-      </MuiThemeProvider>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <Landing />
+        </div>
+      </ThemeProvider>
     </AppContext.Provider>
   );
 }

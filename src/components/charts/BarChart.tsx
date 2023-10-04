@@ -13,7 +13,7 @@ export default function BarChart({data, yAxisText}: BarChartPropsType) {
   const { startDate, endDate } = useDateContext();
 
   const ref = useD3(
-    async function parowki(svg) {
+    async function paint(svg) {
 
       const color = "#e10600";
       const height = 500
@@ -32,8 +32,7 @@ export default function BarChart({data, yAxisText}: BarChartPropsType) {
           .range([height - margin.bottom, margin.top])
 
         const x = d3.scaleBand()
-          .domain(d3.range(data.length) as any)
-          // .domain(d3.range(data.length).map((i) => i.toString()))
+          .domain(d3.range(data.length).map((i) => i.toString()))
           .range([margin.left, width - margin.right])
           .padding(0.1)
       
@@ -82,7 +81,8 @@ export default function BarChart({data, yAxisText}: BarChartPropsType) {
           .call(yAxis);
       }
     },
-    [startDate, endDate]
+    startDate,
+    endDate
   );
 
   return (

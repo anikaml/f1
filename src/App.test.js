@@ -10,6 +10,5 @@ describe('Start Date and End Date pickers', () => {
     const checkEndDate = screen.getByText("End Date")
     expect(checkStartDate).toBeInTheDocument();
     expect(checkEndDate).toBeInTheDocument();
-    // screen.debug();
   });
 });

@@ -11,7 +11,7 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
   const { startDate, endDate } = useDateContext();
 
   const ref = useD3(
-    async function parowki(svg) {
+    async function paint(svg) {
       d3.selectAll("g").remove();
       d3.selectAll("circle").remove();
       d3.selectAll("text").remove();
@@ -19,7 +19,7 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
       let world = await getWorld();
       let data = raceData
 
-      let date: Date | string = Date();
+      let date: Date | string = Date(); // eslint-disable-line @typescript-eslint/no-unused-vars
       let projection = d3.geoNaturalEarth1();
       const path = d3.geoPath(projection);
       let ppath = path({type: "Sphere"})
@@ -106,7 +106,8 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
         });
 
     },
-    [startDate, endDate]
+    startDate,
+    endDate
   );
 
   return (
