@@ -32,7 +32,7 @@ Resources:
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/amazonlinux2-x86_64-standard:1.0
       Source:
-        Location: https://github.com/anikaniescierewicz/f1.git
+        Location: https://github.com/anikaml/f1.git
         Type: GITHUB
       TimeoutInMinutes: 30
       Triggers:
