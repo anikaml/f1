@@ -1,21 +1,19 @@
-import DateFnsUtils from '@date-io/date-fns';
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { createMuiTheme, useMediaQuery } from "@material-ui/core";
-import { ThemeProvider, makeStyles } from "@material-ui/styles";
-
+import { styled } from '@mui/material/styles';
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useMediaQuery } from "@mui/material";
 import {RaceDate} from '../libs/interfaces';
 import theme from "../utils/theme";
 
-const datePickerTheme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#e10600"
-    },
-  },
-});
+const PREFIX = 'DatePickers';
 
-const useStyles = makeStyles({
-  datePickerWeb: {
+const classes = {
+  datePickerWeb: `${PREFIX}-datePickerWeb`,
+  datePickerMobile: `${PREFIX}-datePickerMobile`
+};
+
+const StyledDatePickers = styled('div')({
+  [`& .${classes.datePickerWeb}`]: {
     margin: '2em 2em 4em',
     '& .MuiInputBase-input': {
       '& .MuiInput-input': {
@@ -24,14 +22,8 @@ const useStyles = makeStyles({
       fontFamily: "Russo One",
     },
   },
-  inputBase: {
-    fontFamily: "Russo One",
-  },
-  datePickerMobile: {
+  [`& .${classes.datePickerMobile}`]: {
     margin: '0em 2em 2em',
-  },
-  inputLabel: {
-    fontFamily: "Russo One",
   }
 });
 
@@ -43,46 +35,30 @@ interface DatePickersPropsType {
 }
 
 export default function DatePickers(props:DatePickersPropsType): JSX.Element {
-  const classes = useStyles();
+
   const breakpointSM = useMediaQuery(theme.breakpoints.up('sm'));
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <ThemeProvider theme={datePickerTheme}>
+    <StyledDatePickers>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
-          autoOk
           format="MM/dd/yyyy"
           disableFuture
           minDate={new Date("1950-05-02")}
-          variant="inline"
           label="Start Date"
           value={props.startDate}
           onChange={(newStartDate: RaceDate) => props.setStartDateChange(newStartDate)}
-          className={breakpointSM? classes.datePickerWeb : classes.datePickerMobile}
-          InputProps={{
-            className: classes.inputBase 
-          }}
-          InputLabelProps={{
-            className: classes.inputLabel 
-          }}
+          className={breakpointSM ? classes.datePickerWeb : classes.datePickerMobile}
         />
         <DatePicker
-          autoOk
           format="MM/dd/yyyy"
           disableFuture
-          minDate={props.startDate}
-          variant="inline"
+          minDate={props.startDate || new Date("1950-05-02")}
           label="End Date"
           value={props.endDate}
           onChange={(newEndDate: RaceDate) => props.setEndDateChange(newEndDate)}
-          className={breakpointSM? classes.datePickerWeb : classes.datePickerMobile}
-          InputProps={{
-            className: classes.inputBase 
-          }}
-          InputLabelProps={{
-            className: classes.inputLabel 
-          }}
+          className={breakpointSM ? classes.datePickerWeb : classes.datePickerMobile}
         />
-      </ThemeProvider>
-    </MuiPickersUtilsProvider>
-  )
+      </LocalizationProvider>
+    </StyledDatePickers>
+  );
 }

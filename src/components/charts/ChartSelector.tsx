@@ -1,30 +1,38 @@
 import { useState } from "react";
+import { styled } from '@mui/material/styles';
 import * as d3 from 'd3';
-import { Button, Container, Typography } from '@material-ui/core/';
-import { makeStyles } from "@material-ui/styles";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Button, Container, Typography, useMediaQuery } from '@mui/material/';
 
 import { GraphSelectorPropsType, CombinedRaceCircuitPropertyEnum } from '../../libs/interfaces';
 import {getPropertyArray} from '../../utils/helpers'
 import BarChart from './BarChart';
 import theme from "../../utils/theme";
 
-const useStyles = makeStyles({
-  button: {
+const PREFIX = 'ChartSelector';
+
+const classes = {
+  button: `${PREFIX}-button`,
+  buttonMobile: `${PREFIX}-buttonMobile`,
+  container: `${PREFIX}-container`,
+  typography: `${PREFIX}-typography`
+};
+
+const Root = styled('div')({
+  [`& .${classes.button}`]: {
     borderRadius: 15,
     fontFamily: "Russo One",
     width: 'auto'
   },
-  buttonMobile: {
+  [`& .${classes.buttonMobile}`]: {
     fontSize: 'small'
   },
-  container: {
+  [`& .${classes.container}`]: {
     display: 'flex',
     padding: "0 0.5em",
     margin: "1em 0",
     justifyContent: "center",
   },
-  typography: {
+  [`& .${classes.typography}`]: {
     margin: '1em 0',
     fontFamily: "Russo One",
     letterSpacing: 10,
@@ -33,7 +41,7 @@ const useStyles = makeStyles({
 });
 
 export default function ChartSelector({raceData}: GraphSelectorPropsType) {
-  const classes = useStyles();
+
   const [selectedButton, setSelectedButton] = useState(CombinedRaceCircuitPropertyEnum.circuitName)
   const breakpointSM = useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -44,7 +52,7 @@ export default function ChartSelector({raceData}: GraphSelectorPropsType) {
   }
 
   return (
-    <>
+    <Root>
       <Typography id='statistics' variant='h6' className={classes.typography}>Statistics</Typography>
       <Container maxWidth="lg" className={classes.container}>
         <Button 
@@ -84,6 +92,6 @@ export default function ChartSelector({raceData}: GraphSelectorPropsType) {
         data={allData[selectedButton]}
         yAxisText={'Races'}
       />
-    </>
-  )
+    </Root>
+  );
 }

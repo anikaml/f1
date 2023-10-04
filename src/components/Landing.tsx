@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { Container, Typography, Link } from '@material-ui/core/';
-import { makeStyles } from '@material-ui/core/styles';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import IconButton from '@material-ui/core/IconButton';
+import { styled } from '@mui/material/styles';
+import { Container, IconButton, Typography, Link } from '@mui/material/';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 import AWSAppSyncClient from 'aws-appsync';
 import ChartSelector from "./charts/ChartSelector";
@@ -14,13 +13,31 @@ import { useAppContext, DateContext } from "../libs/contextLib";
 import WorldMap from "./map/WorldMap";
 import Footer from "./Footer";
 
-const useStyles = makeStyles((theme) => ({
-  title: {
+const PREFIX = 'Landing';
+
+const classes = {
+  title: `${PREFIX}-title`,
+  titleDiv: `${PREFIX}-titleDiv`,
+  emptyDiv: `${PREFIX}-emptyDiv`,
+  iconButton: `${PREFIX}-iconButton`,
+  icon: `${PREFIX}-icon`,
+  typography: `${PREFIX}-typography`,
+  typographyLink: `${PREFIX}-typographyLink`,
+  titleContainer: `${PREFIX}-titleContainer`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.title}`]: {
     fontFamily: 'Russo One',
     padding: "0.5em",
     color: 'white',
-  }, 
-  titleDiv: {
+  },
+
+  [`& .${classes.titleDiv}`]: {
     display: "flex",
     alignItems: "center",
     justifyContent: 'center',
@@ -29,31 +46,43 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '0px 0px 30px 30px',
     marginBottom: '1em'
   },
-  emptyDiv: {
+
+  [`& .${classes.emptyDiv}`]: {
     height: "100vh"
   },
-  iconButton: {
+
+  [`& .${classes.iconButton}`]: {
     color: 'white',
     position: 'absolute',
     right: 50,
   },
-  icon: {
+
+  [`& .${classes.icon}`]: {
     '@media (max-width:700px)': {
       height: '0.5em',
     }
   },
-  typography: {
+
+  [`& .${classes.typography}`]: {
     fontFamily: 'Russo One',
   },
-  titleContainer: {
+
+  [`& .${classes.typographyLink}`]: {
+    fontFamily: 'Russo One',
+    padding: '0 0.25em',
+  },
+
+  [`& .${classes.titleContainer}`]: {
     '@media (max-width:900px)': {
       padding: "0 1em 1em 1em",
-    }
+    },
+    display: 'flex',
+    alignItems: 'center'
   }
 }));
 
 export default function RaceList(): JSX.Element {
-  const classes = useStyles();
+
   const { appSyncClient, allCircuits } = useAppContext();
   const [startDate, setStartDateChange] = useState<Date | null>(new Date("2010-03-02"));
   const [endDate, setEndDateChange] = useState<Date | null>(new Date());
@@ -76,10 +105,10 @@ export default function RaceList(): JSX.Element {
 
   let components;
   if (raceData.length !== 0) {
-    components = (<>
-                    <WorldMap raceData={raceData} />
-                    <ChartSelector raceData={raceData}/>
-                  </>)
+    components = ((<>
+      <WorldMap raceData={raceData} />
+      <ChartSelector raceData={raceData}/>
+    </>))
   } else if (!initialLoad) {
     components = <Typography variant="h6">No races found. Please select different dates</Typography>
   } else {
@@ -87,7 +116,7 @@ export default function RaceList(): JSX.Element {
   }
 
   return (
-    <>
+    <Root>
       <DateContext.Provider
         value={{ startDate, endDate }}
       >
@@ -96,7 +125,7 @@ export default function RaceList(): JSX.Element {
           <IconButton 
             aria-label="github"
             component={Link}
-            href={`https://github.com/anikaniescierewicz/f1`}
+            href={`https://github.com/anikaml/f1`}
             rel="noopener noreferrer"
             target="_blank"
             className={classes.iconButton}
@@ -108,24 +137,30 @@ export default function RaceList(): JSX.Element {
           <div className={classes.titleContainer}>
             <Typography className={classes.typography}>
             {' Select start and end dates to see a '}
-              <Link href="/#timelapse" style={{ textDecoration: 'none'}}>
-                <Typography 
-                  variant="h6"
-                  display={'inline'}
-                >
-                  timelapse
-                </Typography>
-              </Link>
+            </Typography>
+            <Link href="/#timelapse" style={{ textDecoration: 'none'}}>
+              <Typography
+                className={classes.typographyLink}
+                variant="h6"
+                display={'inline'}
+              >
+                timelapse
+              </Typography>
+            </Link>
+            <Typography className={classes.typography}>
               {' and '}
-              <Link href="/#statistics" style={{ textDecoration: 'none'}}>
-                <Typography 
-                  variant="h6"
-                  display={'inline'}
-                >
-                  statistics
-                </Typography>
-              </Link>
-            {' for F1 races in your chosen period'}
+            </Typography>
+            <Link href="/#statistics" style={{ textDecoration: 'none'}}>
+              <Typography
+                className={classes.typographyLink}
+                variant="h6"
+                display={'inline'}
+              >
+                statistics
+              </Typography>
+            </Link>
+            <Typography className={classes.typography}>
+              {' for F1 races in your chosen period'}
             </Typography>
           </div>
           <div id='timelapse'>
@@ -140,6 +175,6 @@ export default function RaceList(): JSX.Element {
         </Container>
         <Footer />
       </DateContext.Provider>
-    </>
+    </Root>
   );
 }

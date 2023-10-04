@@ -45,7 +45,7 @@ export async function getRaceData(appSyncClient: AWSAppSyncClient<any> | undefin
       })
       return res.data.timerangeRaces.races
     } catch(e) {
-      console.log(e)
+      console.error(e)
     }
   }
 }
