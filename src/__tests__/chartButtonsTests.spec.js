@@ -1,7 +1,7 @@
-import {render, screen} from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 import ChartSelector from '../components/charts/ChartSelector';
-import {combinedRaceData} from '../fixtures/combinedRaceData';
+import { combinedRaceData } from '../fixtures/combinedRaceData';
 
 function setup() {
   return render(

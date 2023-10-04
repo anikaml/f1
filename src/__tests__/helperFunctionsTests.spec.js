@@ -1,5 +1,5 @@
 import { getProperty, getPropertyCount, getPropertyArray } from '../utils/helpers';
-import {combinedRaceData} from '../fixtures/combinedRaceData';
+import { combinedRaceData } from '../fixtures/combinedRaceData';
 
 describe('getProperty function', () => {
   const singleRaceData = combinedRaceData[0]
