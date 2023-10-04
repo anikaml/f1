@@ -2,9 +2,8 @@ import { useState } from "react";
 import { styled } from '@mui/material/styles';
 import * as d3 from 'd3';
 import { Button, Container, Typography, useMediaQuery } from '@mui/material/';
-
 import { GraphSelectorPropsType, CombinedRaceCircuitPropertyEnum } from '../../libs/interfaces';
-import {getPropertyArray} from '../../utils/helpers'
+import { getPropertyArray } from '../../utils/helpers'
 import BarChart from './BarChart';
 import theme from "../../utils/theme";
 

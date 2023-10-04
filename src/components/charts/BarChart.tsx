@@ -3,7 +3,6 @@ import { useD3 } from '../../libs/useD3';
 import { useDateContext } from "../../libs/contextLib";
 import { GeneralGraphPropsType } from '../../libs/interfaces';
 
-
 interface BarChartPropsType {
   data: GeneralGraphPropsType[],
   yAxisText: string

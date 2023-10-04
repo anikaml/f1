@@ -1,4 +1,11 @@
-import {getGraphQLEndpoint, isProduction, devGraphQLURL, prodGraphQLURL, devURL, prodURL} from '../aws-exports';
+import {
+  getGraphQLEndpoint,
+  isProduction,
+  devGraphQLURL,
+  prodGraphQLURL,
+  devURL,
+  prodURL
+} from '../aws-exports';
 
 describe('getGraphQLEndpoint function', () => {
   test('It should return production GraphQL URL', () => {

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import { Container, IconButton, Typography, Link } from '@mui/material/';
 import GitHubIcon from '@mui/icons-material/GitHub';
-
 import AWSAppSyncClient from 'aws-appsync';
 import ChartSelector from "./charts/ChartSelector";
 import { combinedRaceCircuit } from '../libs/interfaces';
