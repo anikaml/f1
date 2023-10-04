@@ -16,15 +16,17 @@ describe('Chart Buttons', () => {
     expect(screen.getByRole('button', {name: /Circuits/i})).toBeDisabled();
   })
 
-  test('checks if second button is disabled when clicked', () => {
+  test('checks if second button is disabled when clicked', async () => {
     setup()
-    userEvent.type(screen.getByRole('button', {name: /Drivers/i}))
+    const view = userEvent.setup();
+    await view.click(screen.getByRole('button', {name: /Drivers/i}))
     expect(screen.getByRole('button', {name: /Drivers/i})).toBeDisabled()
   })
 
-  test('checks if first button is not disabled when user clicked on second button', () => {
+  test('checks if first button is not disabled when user clicked on second button', async () => {
     setup()
-    userEvent.type(screen.getByRole('button', {name: /Drivers/i}))
+    const view = userEvent.setup();
+    await view.click(screen.getByRole('button', {name: /Drivers/i}))
     expect(screen.getByRole('button', {name: /Circuits/i})).not.toBeDisabled();
   })
 })
