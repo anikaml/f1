@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useMediaQuery } from "@mui/material";
-import {RaceDate} from '../libs/interfaces';
+import { RaceDate } from '../libs/interfaces';
 import theme from "../utils/theme";
 
 const PREFIX = 'DatePickers';
