@@ -4,7 +4,7 @@
 
 export type PaginatedCircuits = {
   __typename: "PaginatedCircuits",
-  circuits:  Array<Circuit >,
+  circuits: Array<Circuit>,
   nextToken?: string | null,
 };
 
@@ -18,7 +18,7 @@ export type Circuit = {
 
 export type PaginatedRaces = {
   __typename: "PaginatedRaces",
-  races:  Array<Race >,
+  races: Array<Race>,
   nextToken?: string | null,
 };
 
@@ -45,7 +45,7 @@ export type Constructor = {
 
 export type TimerangeRaces = {
   __typename: "TimerangeRaces",
-  races:  Array<Race >,
+  races: Array<Race>,
   nextToken?: string | null,
 };
 
@@ -54,15 +54,15 @@ export type AllCircuitsQueryVariables = {
 };
 
 export type AllCircuitsQuery = {
-  allCircuits:  {
+  allCircuits: {
     __typename: "PaginatedCircuits",
-    circuits:  Array< {
+    circuits: Array<{
       __typename: "Circuit",
       name: string,
       id: number,
       latitude: string,
       longitude: string,
-    } >,
+    }>,
     nextToken?: string | null,
   },
 };
@@ -72,7 +72,7 @@ export type GetCircuitQueryVariables = {
 };
 
 export type GetCircuitQuery = {
-  getCircuit?:  {
+  getCircuit?: {
     __typename: "Circuit",
     name: string,
     id: number,
@@ -86,24 +86,24 @@ export type AllRacesQueryVariables = {
 };
 
 export type AllRacesQuery = {
-  allRaces:  {
+  allRaces: {
     __typename: "PaginatedRaces",
-    races:  Array< {
+    races: Array<{
       __typename: "Race",
       name: string,
       id: number,
       date: string,
-      driver_win:  {
+      driver_win: {
         __typename: "Driver",
         name: string,
       },
-      constructor_win:  {
+      constructor_win: {
         __typename: "Constructor",
         name: string,
       },
       circuit_id: number,
       round: number,
-    } >,
+    }>,
     nextToken?: string | null,
   },
 };
@@ -115,24 +115,24 @@ export type TimerangeRacesQueryVariables = {
 };
 
 export type TimerangeRacesQuery = {
-  timerangeRaces:  {
+  timerangeRaces: {
     __typename: "TimerangeRaces",
-    races:  Array< {
+    races: Array<{
       __typename: "Race",
       name: string,
       id: number,
       date: string,
-      driver_win:  {
+      driver_win: {
         __typename: "Driver",
         name: string,
       },
-      constructor_win:  {
+      constructor_win: {
         __typename: "Constructor",
         name: string,
       },
       circuit_id: number,
       round: number,
-    } >,
+    }>,
     nextToken?: string | null,
   },
 };
@@ -142,16 +142,16 @@ export type GetRaceQueryVariables = {
 };
 
 export type GetRaceQuery = {
-  getRace?:  {
+  getRace?: {
     __typename: "Race",
     name: string,
     id: number,
     date: string,
-    driver_win:  {
+    driver_win: {
       __typename: "Driver",
       name: string,
     },
-    constructor_win:  {
+    constructor_win: {
       __typename: "Constructor",
       name: string,
     },

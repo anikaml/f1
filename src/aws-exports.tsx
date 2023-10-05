@@ -6,17 +6,17 @@ export const devURL = 'dev.f1.anikamlodzianowski.com'
 export const prodURL = 'f1.anikamlodzianowski.com'
 
 export default {
-    // aws_project_region: "us-east-1",
-    graphqlEndpoint: getGraphQLEndpoint(isProduction()),
-    region: "us-west-2",
-    authenticationType: "AWS_IAM"
+  // aws_project_region: "us-east-1",
+  graphqlEndpoint: getGraphQLEndpoint(isProduction()),
+  region: "us-west-2",
+  authenticationType: "AWS_IAM",
+  identityPoolId: "us-west-2:88fd97d7-2549-4676-8364-cb953e6aa9b5"
 };
 
 export function getGraphQLEndpoint(isProd: boolean): string {
-    return isProd ? prodGraphQLURL : devGraphQLURL
+  return isProd ? prodGraphQLURL : devGraphQLURL
 }
 
 export function isProduction(hostname: string = window.location.hostname): boolean {
-    console.log(window.location)
   return hostname === prodURL
 }

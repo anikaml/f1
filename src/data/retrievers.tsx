@@ -1,7 +1,9 @@
-import gql from 'graphql-tag';
 import * as d3 from 'd3';
 import { allCircuits, timerangeRaces } from '../graphql/queries';
-import AWSAppSyncClient from 'aws-appsync';
+
+import { API, graphqlOperation } from "aws-amplify";
+import { GraphQLQuery } from '@aws-amplify/api';
+
 import { Topology } from "topojson-specification" ;
 import { Circuit, Race, TimerangeRaces } from "../API"
 import { circuitObject, combinedRaceCircuit, point } from "../libs/interfaces"
@@ -15,16 +17,12 @@ interface apiResponse {
 };
 
 interface raceApiResponse { 
-  data: {
-    timerangeRaces: TimerangeRaces
-  }
+  timerangeRaces: TimerangeRaces
 };
 
 interface circuitApiResponse { 
-  data: {
-    allCircuits: {
-      circuits: Circuit[]
-    }
+  allCircuits: {
+    circuits: Circuit[]
   }
 };
 
@@ -33,34 +31,25 @@ export async function getWorld() {
   return (world as unknown) as Topology;
 }
 
-export async function getRaceData(appSyncClient: AWSAppSyncClient<any> | undefined, startDate: Date, endDate: Date){
-  if(appSyncClient) {
-    try {
-      const res: raceApiResponse = await appSyncClient.query({
-        query: gql(timerangeRaces),
-        variables: {
-          "StartDate": startDate.toISOString().substring(0,10),
-          "EndDate": endDate.toISOString().substring(0,10)
-        }
-      })
-      return res.data.timerangeRaces.races
-    } catch(e) {
-      console.error(e)
-    }
+export async function getRaceData(startDate: Date, endDate: Date){
+  try {
+    const res = await API.graphql<GraphQLQuery<raceApiResponse>>(graphqlOperation(timerangeRaces, {
+      "StartDate": startDate.toISOString().substring(0,10),
+      "EndDate": endDate.toISOString().substring(0,10)
+    }));
+    return res.data?.timerangeRaces.races
+  } catch(e) {
+    console.error(e)
   }
 }
 
-export async function getCircuitData(appSyncClient: AWSAppSyncClient<any> | undefined) {
-  if (appSyncClient) {
-    let res: circuitApiResponse = await appSyncClient.query({
-      query: gql(allCircuits)
-    })
-    return res.data.allCircuits.circuits
-  }
+export async function getCircuitData() {
+  const res = await API.graphql<GraphQLQuery<circuitApiResponse>>(graphqlOperation(allCircuits))
+  return res.data?.allCircuits.circuits
 }
 
-export async function getCircuitsObject(appSyncClient: AWSAppSyncClient<any> | undefined) {
-  let circuit_list = await getCircuitData(appSyncClient)
+export async function getCircuitsObject() {
+  let circuit_list = await getCircuitData()
   let circuitObject: circuitObject = {};
   if(circuit_list){
     circuit_list.forEach((element: Circuit) => {
@@ -70,8 +59,8 @@ export async function getCircuitsObject(appSyncClient: AWSAppSyncClient<any> | u
   return circuitObject
 }
 
-export async function getRacesWithCircuits(appSyncClient: AWSAppSyncClient<any> | undefined, startDate: Date, endDate: Date, allCircuits: Promise<circuitObject>) {
-  let race_list = await getRaceData(appSyncClient, startDate, endDate)
+export async function getRacesWithCircuits(startDate: Date, endDate: Date, allCircuits: Promise<circuitObject>) {
+  let race_list = await getRaceData(startDate, endDate)
   let circuit_list = await allCircuits;
   const projection = d3.geoNaturalEarth1();
   let combinedList: combinedRaceCircuit[] = []
@@ -87,6 +76,5 @@ export async function getRacesWithCircuits(appSyncClient: AWSAppSyncClient<any> 
       }
     })
   }
-  console.log('combinedList', combinedList)
   return combinedList
 }

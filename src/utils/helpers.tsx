@@ -23,7 +23,7 @@ export function getPropertyCount(inputData: combinedRaceCircuit[], property: Com
   let result: resultType = {}
   inputData.forEach((element) => {
     let p = getProperty(element, property)
-    if(result[p]){
+    if (result[p]) {
       result[p] += 1
     } else {
       result[p] = 1
@@ -36,7 +36,7 @@ export function getPropertyArray(inputData: combinedRaceCircuit[], property: Com
   let countedData = getPropertyCount(inputData, property)
   let resultArray: resultArrayType[] = []
   Object.entries(countedData).forEach(([key, value]) => {
-    resultArray.push({name: key, value: value})
+    resultArray.push({ name: key, value: value })
   })
   return resultArray
 }

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import { Container, IconButton, Typography, Link } from '@mui/material/';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import AWSAppSyncClient from 'aws-appsync';
 import ChartSelector from "./charts/ChartSelector";
 import { combinedRaceCircuit } from '../libs/interfaces';
 import DatePickers from "./DatePickers";
@@ -82,7 +81,7 @@ const Root = styled('div')((
 
 export default function RaceList(): JSX.Element {
 
-  const { appSyncClient, allCircuits } = useAppContext();
+  const { allCircuits } = useAppContext();
   const [startDate, setStartDateChange] = useState<Date | null>(new Date("2010-03-02"));
   const [endDate, setEndDateChange] = useState<Date | null>(new Date());
   const [raceData, setRaceData] = useState<combinedRaceCircuit[]>([])
@@ -90,13 +89,13 @@ export default function RaceList(): JSX.Element {
 
   useEffect(() => {
     if (startDate && endDate && allCircuits){
-      getSetRaceData(appSyncClient, startDate, endDate, allCircuits)
+      getSetRaceData(startDate, endDate, allCircuits)
     }
-  }, [startDate, endDate, appSyncClient, allCircuits]);
+  }, [startDate, endDate, allCircuits]);
 
-  async function getSetRaceData(appSyncClient: AWSAppSyncClient<any> | undefined, startDate: RaceDate, endDate: RaceDate, allCircuits: Promise<circuitObject>) {
-    if (appSyncClient && startDate && endDate && allCircuits){
-      let data = await getRacesWithCircuits(appSyncClient, startDate, endDate, allCircuits)
+  async function getSetRaceData(startDate: RaceDate, endDate: RaceDate, allCircuits: Promise<circuitObject>) {
+    if (startDate && endDate && allCircuits){
+      let data = await getRacesWithCircuits(startDate, endDate, allCircuits)
       setRaceData(data)
       setInitialLoad(false)
     }

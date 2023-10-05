@@ -34,7 +34,7 @@ interface DatePickersPropsType {
   setEndDateChange: (newStartDate: RaceDate) => void
 }
 
-export default function DatePickers(props:DatePickersPropsType): JSX.Element {
+export default function DatePickers(props: DatePickersPropsType): JSX.Element {
 
   const breakpointSM = useMediaQuery(theme.breakpoints.up('sm'));
   return (
