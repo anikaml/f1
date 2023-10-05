@@ -1,6 +1,6 @@
 import './App.css';
-import Auth from '@aws-amplify/auth'
-import AWSAppSyncClient, { AWSAppSyncClientOptions, AUTH_TYPE } from 'aws-appsync'
+// import Auth from '@aws-amplify/auth'
+import { Amplify } from "aws-amplify";
 
 import { AppContext } from "./libs/contextLib";
 import AppSyncConfig from './aws-exports'
@@ -9,28 +9,24 @@ import Landing from "./components/Landing";
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './utils/theme';
 
-Auth.configure({
-  region: 'us-west-2',
-  identityPoolId: "us-west-2:88fd97d7-2549-4676-8364-cb953e6aa9b5",
-})
-
-const appSyncConfig: AWSAppSyncClientOptions = {
-  url: AppSyncConfig.graphqlEndpoint,
-  region: AppSyncConfig.region,
-  auth: {
-    type: AUTH_TYPE.AWS_IAM,
-    credentials: () => Auth.currentCredentials()
+const amplifyConfig = {
+  Auth: {
+    region: AppSyncConfig.region,
+    identityPoolId: AppSyncConfig.identityPoolId,
   },
-  disableOffline: true // https://github.com/awslabs/aws-mobile-appsync-sdk-js/issues/102
+  aws_appsync_graphqlEndpoint: AppSyncConfig.graphqlEndpoint,
+  aws_appsync_region: AppSyncConfig.region,
+  aws_appsync_authenticationType: AppSyncConfig.authenticationType
 }
 
-const appSyncClient = new AWSAppSyncClient(appSyncConfig)
-const allCircuits = getCircuitsObject(appSyncClient)
+Amplify.configure(amplifyConfig)
+
+const allCircuits = getCircuitsObject()
 
 function App(): JSX.Element {
   return (
     <AppContext.Provider
-      value={{ appSyncClient, allCircuits }}
+      value={{ allCircuits }}
     >
       <ThemeProvider theme={theme}>
         <div className="App">

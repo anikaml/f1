@@ -1,9 +1,7 @@
 import { useContext, createContext } from "react";
-import AWSAppSyncClient from 'aws-appsync'
-import {circuitObject, RaceDate} from '../libs/interfaces'
+import { circuitObject, RaceDate } from '../libs/interfaces'
 
-interface ContextProps { 
-  appSyncClient: AWSAppSyncClient<any>,
+interface ContextProps {
   allCircuits: Promise<circuitObject>
 };
 
@@ -13,7 +11,7 @@ export function useAppContext() {
   return useContext(AppContext);
 }
 
-interface DateContextProps { 
+interface DateContextProps {
   startDate: RaceDate,
   endDate: RaceDate
 };

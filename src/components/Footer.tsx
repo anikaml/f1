@@ -31,12 +31,12 @@ export default function Footer() {
 
   return (
     <Root className={classes.footer}>
-       <Link 
-          href="https://anikamlodzianowski.com"
-          style={{ textDecoration: 'none'}}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+      <Link
+        href="https://anikamlodzianowski.com"
+        style={{ textDecoration: 'none' }}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <Typography variant="caption" className={classes.typography}>
           {new Date().getFullYear()} Anika Mlodzianowski
         </Typography>

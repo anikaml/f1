@@ -7,7 +7,7 @@ import { getWorld } from '../../data/retrievers';
 import { GraphSelectorPropsType } from '../../libs/interfaces';
 import { useD3 } from '../../libs/useD3';
 
-export default function WorldMap({raceData}: GraphSelectorPropsType) {
+export default function WorldMap({ raceData }: GraphSelectorPropsType) {
   const { startDate, endDate } = useDateContext();
 
   const ref = useD3(
@@ -22,7 +22,7 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
       let date: Date | string = Date(); // eslint-disable-line @typescript-eslint/no-unused-vars
       let projection = d3.geoNaturalEarth1();
       const path = d3.geoPath(projection);
-      let ppath = path({type: "Sphere"})
+      let ppath = path({ type: "Sphere" })
 
       const delay = d3.scaleTime()
         .domain([data[0].date, data[data.length - 1].date])
@@ -77,7 +77,7 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
             .attr("fill-opacity", 0)
             .attr("stroke-opacity", 1)
 
-            g.append("text")
+          g.append("text")
             .text(d.circuitName)
             .attr("transform", `translate(${d.coordinates})`)
             .attr("fill-opacity", 1)
@@ -87,12 +87,12 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
             .attr("fill-opacity", 0)
             .attr("stroke-opacity", 0)
 
-            t.text(d.date.toISOString().substring(0,10) + ' ' + d.name)
+          t.text(d.date.toISOString().substring(0, 10) + ' ' + d.name)
             .attr('transform', 'translate(330, -15)')
-            .style("font-size","20px")
+            .style("font-size", "20px")
             .style("font-family", "Russo One")
             .style("margin-bottom", 20)
-            
+
         }, delay(d.date));
       }
 
@@ -102,7 +102,7 @@ export default function WorldMap({raceData}: GraphSelectorPropsType) {
         .tween("date", () => {
           let dd: [Date, Date] = delay.domain() as [Date, Date]
           const i = d3.interpolateDate(...dd);
-          return (t:number) => date = d3.timeDay(i(t));
+          return (t: number) => date = d3.timeDay(i(t));
         });
 
     },

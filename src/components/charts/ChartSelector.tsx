@@ -39,7 +39,7 @@ const Root = styled('div')({
   }
 });
 
-export default function ChartSelector({raceData}: GraphSelectorPropsType) {
+export default function ChartSelector({ raceData }: GraphSelectorPropsType) {
 
   const [selectedButton, setSelectedButton] = useState(CombinedRaceCircuitPropertyEnum.circuitName)
   const breakpointSM = useMediaQuery(theme.breakpoints.up('sm'));
@@ -54,33 +54,33 @@ export default function ChartSelector({raceData}: GraphSelectorPropsType) {
     <Root>
       <Typography id='statistics' variant='h6' className={classes.typography}>Statistics</Typography>
       <Container maxWidth="lg" className={classes.container}>
-        <Button 
+        <Button
           variant='contained'
           onClick={() => setSelectedButton(CombinedRaceCircuitPropertyEnum.circuitName)}
-          color={selectedButton === CombinedRaceCircuitPropertyEnum.circuitName? 'primary' : 'secondary'}
-          className={breakpointSM? classes.button : classes.buttonMobile + ' ' + classes.button}
-          size={breakpointSM? 'medium': 'small'}
+          color={selectedButton === CombinedRaceCircuitPropertyEnum.circuitName ? 'primary' : 'secondary'}
+          className={breakpointSM ? classes.button : classes.buttonMobile + ' ' + classes.button}
+          size={breakpointSM ? 'medium' : 'small'}
           disabled={selectedButton === CombinedRaceCircuitPropertyEnum.circuitName}
         >
           Circuits
         </Button>
-        <Button 
+        <Button
           variant='contained'
           onClick={() => setSelectedButton(CombinedRaceCircuitPropertyEnum.driver_win)}
-          color={selectedButton === CombinedRaceCircuitPropertyEnum.driver_win? 'primary' : 'secondary'}
-          className={breakpointSM? classes.button : classes.buttonMobile + ' ' + classes.button}
-          size={breakpointSM? 'medium': 'small'}
+          color={selectedButton === CombinedRaceCircuitPropertyEnum.driver_win ? 'primary' : 'secondary'}
+          className={breakpointSM ? classes.button : classes.buttonMobile + ' ' + classes.button}
+          size={breakpointSM ? 'medium' : 'small'}
           disabled={selectedButton === CombinedRaceCircuitPropertyEnum.driver_win}
-          style={{margin: "0 0.5em"}}
+          style={{ margin: "0 0.5em" }}
         >
           Drivers
         </Button>
-        <Button 
+        <Button
           variant='contained'
           onClick={() => setSelectedButton(CombinedRaceCircuitPropertyEnum.constructor_win)}
-          color={selectedButton === CombinedRaceCircuitPropertyEnum.constructor_win? 'primary' : 'secondary'}
-          className={breakpointSM? classes.button : classes.buttonMobile + ' ' + classes.button}
-          size={breakpointSM? 'medium': 'small'}
+          color={selectedButton === CombinedRaceCircuitPropertyEnum.constructor_win ? 'primary' : 'secondary'}
+          className={breakpointSM ? classes.button : classes.buttonMobile + ' ' + classes.button}
+          size={breakpointSM ? 'medium' : 'small'}
           disabled={selectedButton === CombinedRaceCircuitPropertyEnum.constructor_win}
         >
           Constructors
