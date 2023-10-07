@@ -1,12 +1,15 @@
-import { styled } from '@mui/material/styles';
-import { Link, Typography } from '@mui/material/';
+import React from 'react'
+import { styled } from '@mui/material/styles'
+import { Link, Typography } from '@mui/material/'
+import packageJson from '../../package.json'
 
-const PREFIX = 'Footer';
+const PREFIX = 'Footer'
 
 const classes = {
   footer: `${PREFIX}-footer`,
-  typography: `${PREFIX}-typography`
-};
+  typography: `${PREFIX}-typography`,
+  version: `${PREFIX}-version`
+}
 
 const Root = styled('div')((
   {
@@ -16,24 +19,32 @@ const Root = styled('div')((
   [`&.${classes.footer}`]: {
     width: '100vw',
     padding: '1em 0',
-    backgroundColor: theme.palette.primary.main
+    backgroundColor: theme.palette.primary.main,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
 
   [`& .${classes.typography}`]: {
     color: 'white',
-    fontFamily: 'Russo One',
+    fontFamily: 'Russo One'
+  },
+
+  [`& .${classes.version}`]: {
+    float: 'left',
+    marginLeft: '1em'
   }
-}));
+}))
 
-
-export default function Footer() {
-
-
+export default function Footer(): React.JSX.Element {
   return (
     <Root className={classes.footer}>
+      <Typography variant="caption" className={`${classes.typography} ${classes.version}`}>
+        Version: {packageJson.version}
+      </Typography>
       <Link
         href="https://anikamlodzianowski.com"
-        style={{ textDecoration: 'none' }}
+        style={{ textDecoration: 'none', display: 'grid', marginRight: '1em' }}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -42,5 +53,5 @@ export default function Footer() {
         </Typography>
       </Link>
     </Root>
-  );
+  )
 }

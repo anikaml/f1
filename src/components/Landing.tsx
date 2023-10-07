@@ -1,17 +1,16 @@
-import { useState, useEffect } from "react";
-import { styled } from '@mui/material/styles';
-import { Container, IconButton, Typography, Link } from '@mui/material/';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import ChartSelector from "./charts/ChartSelector";
-import { combinedRaceCircuit } from '../libs/interfaces';
-import DatePickers from "./DatePickers";
-import { getRacesWithCircuits } from '../data/retrievers';
-import { RaceDate, circuitObject } from '../libs/interfaces';
-import { useAppContext, DateContext } from "../libs/contextLib";
-import WorldMap from "./map/WorldMap";
-import Footer from "./Footer";
+import React, { useState, useEffect } from 'react'
+import { styled } from '@mui/material/styles'
+import { Container, IconButton, Typography, Link } from '@mui/material/'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import ChartSelector from './charts/ChartSelector'
+import { type combinedRaceCircuit, type circuitObject } from '../libs/interfaces'
+import DatePickers from './DatePickers'
+import { getRacesWithCircuits } from '../data/retrievers'
+import { useAppContext, DateContext } from '../libs/contextLib'
+import WorldMap from './map/WorldMap'
+import Footer from './Footer'
 
-const PREFIX = 'Landing';
+const PREFIX = 'Landing'
 
 const classes = {
   title: `${PREFIX}-title`,
@@ -22,7 +21,7 @@ const classes = {
   typography: `${PREFIX}-typography`,
   typographyLink: `${PREFIX}-typographyLink`,
   titleContainer: `${PREFIX}-titleContainer`
-};
+}
 
 const Root = styled('div')((
   {
@@ -31,13 +30,13 @@ const Root = styled('div')((
 ) => ({
   [`& .${classes.title}`]: {
     fontFamily: 'Russo One',
-    padding: "0.5em",
-    color: 'white',
+    padding: '0.5em',
+    color: 'white'
   },
 
   [`& .${classes.titleDiv}`]: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     justifyContent: 'center',
     background: theme.palette.primary.main,
     width: '100vw',
@@ -46,71 +45,70 @@ const Root = styled('div')((
   },
 
   [`& .${classes.emptyDiv}`]: {
-    height: "100vh"
+    height: '100vh'
   },
 
   [`& .${classes.iconButton}`]: {
     color: 'white',
     position: 'absolute',
-    right: 50,
+    right: 50
   },
 
   [`& .${classes.icon}`]: {
     '@media (max-width:700px)': {
-      height: '0.5em',
+      height: '0.5em'
     }
   },
 
   [`& .${classes.typography}`]: {
-    fontFamily: 'Russo One',
+    fontFamily: 'Russo One'
   },
 
   [`& .${classes.typographyLink}`]: {
     fontFamily: 'Russo One',
-    padding: '0 0.25em',
+    padding: '0 0.25em'
   },
 
   [`& .${classes.titleContainer}`]: {
     '@media (max-width:900px)': {
-      padding: "0 1em 1em 1em",
+      padding: '0 1em 1em 1em'
     },
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap'
   }
-}));
+}))
 
-export default function RaceList(): JSX.Element {
-
-  const { allCircuits } = useAppContext();
-  const [startDate, setStartDateChange] = useState<Date | null>(new Date("2010-03-02"));
-  const [endDate, setEndDateChange] = useState<Date | null>(new Date());
+export default function RaceList(): React.JSX.Element {
+  const { allCircuits } = useAppContext()
+  const [startDate, setStartDateChange] = useState<Date | null>(new Date('2010-03-02'))
+  const [endDate, setEndDateChange] = useState<Date | null>(new Date())
   const [raceData, setRaceData] = useState<combinedRaceCircuit[]>([])
   const [initialLoad, setInitialLoad] = useState<boolean>(true)
 
   useEffect(() => {
-    if (startDate && endDate && allCircuits){
-      getSetRaceData(startDate, endDate, allCircuits)
+    if (startDate !== null && endDate !== null && allCircuits !== undefined) {
+      getSetRaceData(startDate, endDate, allCircuits) // eslint-disable-line @typescript-eslint/no-floating-promises
     }
-  }, [startDate, endDate, allCircuits]);
+  }, [startDate, endDate, allCircuits])
 
-  async function getSetRaceData(startDate: RaceDate, endDate: RaceDate, allCircuits: Promise<circuitObject>) {
-    if (startDate && endDate && allCircuits){
-      let data = await getRacesWithCircuits(startDate, endDate, allCircuits)
-      setRaceData(data)
-      setInitialLoad(false)
-    }
+  async function getSetRaceData(startDate: Date, endDate: Date, allCircuits: Promise<circuitObject>): Promise<void> {
+    const data = await getRacesWithCircuits(startDate, endDate, allCircuits)
+    setRaceData(data)
+    setInitialLoad(false)
   }
 
-  let components;
+  let components
   if (raceData.length !== 0) {
     components = ((<>
       <WorldMap raceData={raceData} />
-      <ChartSelector raceData={raceData}/>
+      <ChartSelector raceData={raceData} />
     </>))
   } else if (!initialLoad) {
     components = <Typography variant="h6">No races found. Please select different dates</Typography>
   } else {
-    components = <div className={classes.emptyDiv}/>
+    components = <div className={classes.emptyDiv} />
   }
 
   return (
@@ -120,23 +118,23 @@ export default function RaceList(): JSX.Element {
       >
         <div className={classes.titleDiv}>
           <Typography variant="h3" className={classes.title}>F1 stats</Typography>
-          <IconButton 
+          <IconButton
             aria-label="github"
             component={Link}
-            href={`https://github.com/anikaml/f1`}
+            href={'https://github.com/anikaml/f1'}
             rel="noopener noreferrer"
             target="_blank"
             className={classes.iconButton}
           >
-           <GitHubIcon className={classes.icon}/>
-        </IconButton>
+            <GitHubIcon className={classes.icon} />
+          </IconButton>
         </div>
         <Container maxWidth="md">
           <div className={classes.titleContainer}>
             <Typography className={classes.typography}>
-            {' Select start and end dates to see a '}
+              {' Select start and end dates to see a '}
             </Typography>
-            <Link href="/#timelapse" style={{ textDecoration: 'none'}}>
+            <Link href="/#timelapse" style={{ textDecoration: 'none' }}>
               <Typography
                 className={classes.typographyLink}
                 variant="h6"
@@ -148,7 +146,7 @@ export default function RaceList(): JSX.Element {
             <Typography className={classes.typography}>
               {' and '}
             </Typography>
-            <Link href="/#statistics" style={{ textDecoration: 'none'}}>
+            <Link href="/#statistics" style={{ textDecoration: 'none' }}>
               <Typography
                 className={classes.typographyLink}
                 variant="h6"
@@ -162,7 +160,7 @@ export default function RaceList(): JSX.Element {
             </Typography>
           </div>
           <div id='timelapse'>
-            <DatePickers 
+            <DatePickers
               startDate={startDate}
               endDate={endDate}
               setStartDateChange={setStartDateChange}
@@ -174,5 +172,5 @@ export default function RaceList(): JSX.Element {
         <Footer />
       </DateContext.Provider>
     </Root>
-  );
+  )
 }
