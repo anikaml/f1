@@ -76,7 +76,7 @@ Resources:
         Origins:
         - Id: staticResources
           DomainName: !Join ['', [!Ref EnvironmentName, -anika-f1-app-static, .s3.amazonaws.com]]
-          OriginPath: /build/build
+          OriginPath: /build/dist
           S3OriginConfig:
             OriginAccessIdentity: !Join ['', ['origin-access-identity/cloudfront/', !Ref CloudFrontOriginAccessIdentity]]
         ViewerCertificate:
