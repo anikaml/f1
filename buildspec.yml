@@ -5,7 +5,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-        nodejs: 18
+      nodejs: 18
   pre_build:
     on-failure: ABORT
     commands:
@@ -22,5 +22,5 @@ phases:
       - echo Build completed, artifacts will be uploaded
 artifacts:
   files:
-    - build/**/*
+    - dist/**/*
   name: artifact-name
