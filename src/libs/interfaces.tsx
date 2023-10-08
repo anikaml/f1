@@ -1,16 +1,14 @@
-import { Circuit, Race } from "../API"
+import { type Circuit, type Race } from '../API'
 
 export type RaceDate = Date | null
 
-export interface circuitObject {
-  [id: number]: Circuit
-};
+export type circuitObject = Record<number, Circuit>
 
 export type point = [number, number] | null
 
 export interface combinedRaceCircuit extends Omit<Race, 'date'> {
-  date: Date,
-  circuitName: string,
+  date: Date
+  circuitName: string
   coordinates: point
 };
 
@@ -23,12 +21,12 @@ export interface GraphSelectorPropsType {
 }
 
 export interface GeneralGraphPropsType {
-  name: string,
+  name: string
   value: number
 }
 
 export enum CombinedRaceCircuitPropertyEnum {
-  circuitName = "circuitName",
-  driver_win = "driver_win",
-  constructor_win = "constructor_win",
+  circuitName = 'circuitName',
+  driver_win = 'driver_win',
+  constructor_win = 'constructor_win',
 }
