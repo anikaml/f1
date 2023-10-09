@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom'
-import { getProperty, getPropertyCount, getPropertyArray } from '../helpers'
+import { getProperty, getPropertyCount, getPropertyArray, isValidRaceDate } from '../helpers'
+import { DEFAULT_START_DATE, MIN_START_DATE } from '../../utils/consts'
 
 import combinedRaceData from '../../__tests__/fixtures/combinedRaceData.json'
 
@@ -161,5 +162,26 @@ describe('getPropertyArray function', () => {
       }
     ]
     expect(getPropertyArray(combinedRaceData, 'constructor_win')).toEqual(output)
+  })
+})
+
+describe('isValidRaceDate function', () => {
+  test('It should be true for current date', () => {
+    expect(isValidRaceDate(new Date(), new Date(MIN_START_DATE))).toBeTruthy()
+  })
+  test('It should be true for minimum date', () => {
+    expect(isValidRaceDate(new Date(MIN_START_DATE), new Date(MIN_START_DATE))).toBeTruthy()
+  })
+  test('It should be true for default start date', () => {
+    expect(isValidRaceDate(new Date(DEFAULT_START_DATE), new Date(MIN_START_DATE))).toBeTruthy()
+  })
+  test('It should be false for null date', () => {
+    expect(isValidRaceDate(null, new Date(MIN_START_DATE))).toBeFalsy()
+  })
+  test('It should be false for date below minimum', () => {
+    expect(isValidRaceDate(new Date('1800-10-10'), new Date(MIN_START_DATE))).toBeFalsy()
+  })
+  test('It should be false for future date', () => {
+    expect(isValidRaceDate(new Date('9000-10-10'), new Date(MIN_START_DATE))).toBeFalsy()
   })
 })

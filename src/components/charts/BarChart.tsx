@@ -37,7 +37,6 @@ export default function BarChart({ data, yAxisText }: BarChartPropsType): React.
       const yAxis = (g: d3.Selection<SVGGElement, any, null, undefined>): d3.Selection<SVGGElement, any, null, undefined> => g
         .attr('transform', `translate(${margin.left},0)`)
         .call(d3.axisLeft(y).ticks(null, '.4'))
-        .call(g => g.select('.domain').remove())
         .call(g => g.append('text')
           .attr('x', -margin.left)
           .attr('y', 10)
@@ -91,7 +90,6 @@ export default function BarChart({ data, yAxisText }: BarChartPropsType): React.
         }}
       >
         <g style={{ width: '100%' }}></g>
-
       </svg>
     </>
   )

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles'
-import { Container, IconButton, Typography, Link } from '@mui/material/'
+import { Container, IconButton, Typography, Link, CircularProgress } from '@mui/material/'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import ChartSelector from './charts/ChartSelector'
-import { type combinedRaceCircuit, type circuitObject } from '../libs/interfaces'
+import { type combinedRaceCircuit, type circuitObject, type RaceDate } from '../libs/interfaces'
 import DatePickers from './DatePickers'
 import { getRacesWithCircuits } from '../data/retrievers'
 import { useAppContext, DateContext } from '../libs/contextLib'
+import { isValidRaceDate } from '../utils/helpers'
+import { DEFAULT_START_DATE, MIN_START_DATE } from '../utils/consts'
 import WorldMap from './map/WorldMap'
 import Footer from './Footer'
 
@@ -20,7 +22,8 @@ const classes = {
   icon: `${PREFIX}-icon`,
   typography: `${PREFIX}-typography`,
   typographyLink: `${PREFIX}-typographyLink`,
-  titleContainer: `${PREFIX}-titleContainer`
+  titleContainer: `${PREFIX}-titleContainer`,
+  container: `${PREFIX}-container`
 }
 
 const Root = styled('div')((
@@ -29,7 +32,6 @@ const Root = styled('div')((
   }
 ) => ({
   [`& .${classes.title}`]: {
-    fontFamily: 'Russo One',
     padding: '0.5em',
     color: 'white'
   },
@@ -60,12 +62,7 @@ const Root = styled('div')((
     }
   },
 
-  [`& .${classes.typography}`]: {
-    fontFamily: 'Russo One'
-  },
-
   [`& .${classes.typographyLink}`]: {
-    fontFamily: 'Russo One',
     padding: '0 0.25em'
   },
 
@@ -77,38 +74,68 @@ const Root = styled('div')((
     alignItems: 'center',
     justifyContent: 'center',
     flexWrap: 'wrap'
+  },
+
+  [`& .${classes.container}`]: {
+    height: '100%',
+    minHeight: '100vh'
   }
 }))
 
 export default function RaceList(): React.JSX.Element {
   const { allCircuits } = useAppContext()
-  const [startDate, setStartDateChange] = useState<Date | null>(new Date('2010-03-02'))
-  const [endDate, setEndDateChange] = useState<Date | null>(new Date())
+  const [startDate, setStartDateChange] = useState<RaceDate>(new Date(DEFAULT_START_DATE))
+  const [endDate, setEndDateChange] = useState<RaceDate>(new Date())
   const [raceData, setRaceData] = useState<combinedRaceCircuit[]>([])
-  const [initialLoad, setInitialLoad] = useState<boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   useEffect(() => {
-    if (startDate !== null && endDate !== null && allCircuits !== undefined) {
-      getSetRaceData(startDate, endDate, allCircuits) // eslint-disable-line @typescript-eslint/no-floating-promises
-    }
+    setIsLoading(true)
+    validateAndFetch(startDate, endDate, allCircuits) // eslint-disable-line @typescript-eslint/no-floating-promises
   }, [startDate, endDate, allCircuits])
 
-  async function getSetRaceData(startDate: Date, endDate: Date, allCircuits: Promise<circuitObject>): Promise<void> {
+  async function validateAndFetch(startDate: RaceDate, endDate: RaceDate, allCircuits: Promise<circuitObject> | undefined): Promise<void> {
+    const allCircuitsResults = await allCircuits
+    const error = validateInputs(startDate, endDate, allCircuitsResults)
+    if (error !== '') {
+      setErrorMessage(error)
+    } else if (startDate !== null && endDate !== null && allCircuitsResults !== undefined) { // check is unnecessary here since isValidRaceDate validates if value is null but eslint was complaining
+      await getRaceData(startDate, endDate, allCircuitsResults)
+      setErrorMessage('')
+    }
+    setIsLoading(false)
+  }
+
+  function validateInputs(startDate: RaceDate, endDate: RaceDate, allCircuitsResults: circuitObject | undefined): string {
+    let error = ''
+    if (allCircuitsResults === undefined || Object.keys(allCircuitsResults).length === 0) {
+      error = 'Circuit data not available'
+    } else if (!isValidRaceDate(startDate, new Date(MIN_START_DATE))) {
+      error = 'Invalid Start Date specified'
+    } else if (!isValidRaceDate(endDate, startDate)) {
+      error = 'Invalid End Date specified'
+    }
+    return error
+  }
+
+  async function getRaceData(startDate: Date, endDate: Date, allCircuits: circuitObject): Promise<void> {
     const data = await getRacesWithCircuits(startDate, endDate, allCircuits)
     setRaceData(data)
-    setInitialLoad(false)
   }
 
   let components
-  if (raceData.length !== 0) {
-    components = ((<>
+  if (errorMessage !== '') {
+    components = <Typography variant="h6">{errorMessage}</Typography>
+  } else if (isLoading) {
+    components = <div className={classes.emptyDiv}><CircularProgress /></div>
+  } else if (raceData.length !== 0) {
+    components = (<>
       <WorldMap raceData={raceData} />
       <ChartSelector raceData={raceData} />
-    </>))
-  } else if (!initialLoad) {
-    components = <Typography variant="h6">No races found. Please select different dates</Typography>
+    </>)
   } else {
-    components = <div className={classes.emptyDiv} />
+    components = <Typography variant="h6">{'No races found. Please select different dates'}</Typography>
   }
 
   return (
@@ -129,9 +156,9 @@ export default function RaceList(): React.JSX.Element {
             <GitHubIcon className={classes.icon} />
           </IconButton>
         </div>
-        <Container maxWidth="md">
+        <Container maxWidth="md" className={classes.container}>
           <div className={classes.titleContainer}>
-            <Typography className={classes.typography}>
+            <Typography>
               {' Select start and end dates to see a '}
             </Typography>
             <Link href="/#timelapse" style={{ textDecoration: 'none' }}>
@@ -143,7 +170,7 @@ export default function RaceList(): React.JSX.Element {
                 timelapse
               </Typography>
             </Link>
-            <Typography className={classes.typography}>
+            <Typography>
               {' and '}
             </Typography>
             <Link href="/#statistics" style={{ textDecoration: 'none' }}>
@@ -155,7 +182,7 @@ export default function RaceList(): React.JSX.Element {
                 statistics
               </Typography>
             </Link>
-            <Typography className={classes.typography}>
+            <Typography>
               {' for F1 races in your chosen period'}
             </Typography>
           </div>

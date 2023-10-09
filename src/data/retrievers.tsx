@@ -35,8 +35,9 @@ export async function getRaceData(startDate: Date, endDate: Date): Promise<Race[
       EndDate: endDate.toISOString().substring(0, 10)
     }))
     return res.data?.timerangeRaces.races
-  } catch (e) {
-    console.error(e)
+  } catch (err) {
+    console.error(err)
+    return []
   }
 }
 
@@ -46,19 +47,23 @@ export async function getCircuitData(): Promise<Circuit[] | undefined> {
 }
 
 export async function getCircuitsObject(): Promise<circuitObject> {
-  const circuitList = await getCircuitData()
   const circuitObject: circuitObject = {}
-  if (circuitList !== undefined) {
-    circuitList.forEach((element: Circuit) => {
-      circuitObject[element.id] = element
-    })
+  try {
+    const circuitList = await getCircuitData()
+    if (circuitList !== undefined) {
+      circuitList.forEach((element: Circuit) => {
+        circuitObject[element.id] = element
+      })
+    }
+    return circuitObject
+  } catch (err) {
+    console.error(err)
+    return circuitObject
   }
-  return circuitObject
 }
 
-export async function getRacesWithCircuits(startDate: Date, endDate: Date, allCircuits: Promise<circuitObject>): Promise<combinedRaceCircuit[]> {
+export async function getRacesWithCircuits(startDate: Date, endDate: Date, circuitList: circuitObject): Promise<combinedRaceCircuit[]> {
   const raceList = await getRaceData(startDate, endDate)
-  const circuitList = await allCircuits
   const projection = d3.geoNaturalEarth1()
   let combinedList: combinedRaceCircuit[] = []
   if (raceList !== undefined) {

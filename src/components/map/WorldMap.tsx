@@ -56,7 +56,7 @@ export default function WorldMap({ raceData }: GraphSelectorPropsType): React.JS
         .attr('stroke', 'black')
 
       const t = svg.append('text')
-        .text('elo')
+        .text('')
         .attr('stroke', 'black')
         .attr('fill-opacity', 1)
         .attr('stroke-opacity', 1)

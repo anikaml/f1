@@ -24,7 +24,7 @@ Tech stack consists of the following:
 * Material-UI
 * d3 (world map and bar chart)
 * Jest (unit testing)
-* @testing-library/react (integration tests)
+* React Testing Library (integration tests)
 * GraphQL client (AWS Amplify via Apollo Client)
 * AWS (S3, CloudFront, CodeBuild, CertificateManager, Lambda, IAM, Route53)
 

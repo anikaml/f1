@@ -5,6 +5,7 @@ const theme = createTheme({
     useNextVariants: true,
     fontSize: 18,
     fontFamily: [
+      'Russo One',
       'Roboto',
       '"Helvetica Neue"',
       'Arial',
@@ -74,6 +75,7 @@ const theme = createTheme({
 })
 
 theme.typography.body1 = {
+  fontFamily: 'Russo One',
   fontSize: '1rem',
   '@media (max-width:360px)': {
     fontSize: '0.85rem'
@@ -93,6 +95,7 @@ theme.typography.h2 = {
 }
 
 theme.typography.h3 = {
+  fontFamily: 'Russo One',
   fontSize: '3.42rem',
   fontWeight: 400,
   '@media (max-width:1140px)': {
@@ -101,6 +104,7 @@ theme.typography.h3 = {
 }
 
 theme.typography.h6 = {
+  fontFamily: 'Russo One',
   fontSize: '1.25rem',
   fontWeight: '500',
   '@media (max-width:360px)': {
@@ -110,6 +114,7 @@ theme.typography.h6 = {
 }
 
 theme.typography.caption = {
+  fontFamily: 'Russo One',
   fontSize: '0.75rem',
   '@media (max-width:600px)': {
     fontSize: '0.8rem'

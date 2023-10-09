@@ -1,4 +1,4 @@
-import { type combinedRaceCircuit, CombinedRaceCircuitPropertyEnum } from '../libs/interfaces'
+import { type combinedRaceCircuit, CombinedRaceCircuitPropertyEnum, type RaceDate } from '../libs/interfaces'
 
 type resultType = Record<string, number>
 
@@ -37,4 +37,8 @@ export function getPropertyArray(inputData: combinedRaceCircuit[], property: Com
     resultArray.push({ name: key, value })
   })
   return resultArray
+}
+
+export function isValidRaceDate(date: RaceDate, minDate: RaceDate): boolean {
+  return (date !== null && date <= new Date() && minDate !== null && date >= minDate)
 }

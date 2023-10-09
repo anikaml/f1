@@ -5,6 +5,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { useMediaQuery } from '@mui/material'
 import { type RaceDate } from '../libs/interfaces'
 import theme from '../utils/theme'
+import { MIN_START_DATE } from '../utils/consts'
 
 const PREFIX = 'DatePickers'
 
@@ -46,7 +47,7 @@ export default function DatePickers(props: DatePickersPropsType): React.JSX.Elem
         <DatePicker
           format="MM/dd/yyyy"
           disableFuture
-          minDate={new Date('1950-05-02')}
+          minDate={new Date(MIN_START_DATE)}
           label="Start Date"
           value={props.startDate}
           onChange={(newStartDate: RaceDate) => { props.setStartDateChange(newStartDate) }}
@@ -55,7 +56,7 @@ export default function DatePickers(props: DatePickersPropsType): React.JSX.Elem
         <DatePicker
           format="MM/dd/yyyy"
           disableFuture
-          minDate={props.startDate ?? new Date('1950-05-02')}
+          minDate={props.startDate ?? new Date(MIN_START_DATE)}
           label="End Date"
           value={props.endDate}
           onChange={(newEndDate: RaceDate) => { props.setEndDateChange(newEndDate) }}
